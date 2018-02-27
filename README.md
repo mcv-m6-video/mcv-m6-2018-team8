@@ -14,5 +14,7 @@ Team 8:
 - _A. Salvador, adrisalva122@gmail.com - [AdrianSalvador](https://github.com/AdrianSalvador)_
 - _T. Pérez, tonipereztorres@gmail.com - [tpereztorres](https://github.com/tpereztorres)_
 
-## Week 1
+## Project Schedule
+
+- Week 1: Introduction to video sequence analysis and evaluation
 
