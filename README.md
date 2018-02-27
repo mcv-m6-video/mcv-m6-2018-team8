@@ -1,2 +1,3 @@
-# mcv-m6-2018-team8
+# Video Surveillance for Road Traffic Monitoring
+
 Team 8
