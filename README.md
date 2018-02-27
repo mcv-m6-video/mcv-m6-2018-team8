@@ -17,4 +17,8 @@ Team 8:
 ## Project Schedule
 
 - Week 1: Introduction to video sequence analysis and evaluation
+- Week 2: Background estimation (not done yet!)
+- Week 3: Foreground estimation (not done yet!)
+- Week 4: Video stabilization (not done yet!)
+- Week 5: Region tracking (not done yet!)
 
