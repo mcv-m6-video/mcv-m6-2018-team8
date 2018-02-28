@@ -1,4 +1,5 @@
 import numpy as np
+import sys
 #from scipy.stats import threshold
 
 def performance(gt, test):
@@ -17,6 +18,7 @@ def performance(gt, test):
     TN = 0
     FN = 0
 
+    total = len(y_gt)
     for i in range(len(y_gt)):
         if y_test[i]==1 and y_gt[i]==1:
            TP += 1 # pixels correctly segmented as foreground
@@ -26,6 +28,8 @@ def performance(gt, test):
            TN += 1 # pixels correctly detected as background
         elif y_test[i]==0 and y_gt[i]==1:
            FN += 1 # pixels falsely detected as background
-        print(i)
+
+        sys.stdout.write("\r>  Computing  {:.2f}/{} ... ".format(i, total))
+        # sys.stdout.flush()
 
     return TP, FP, TN, FN, y_gt, y_test
