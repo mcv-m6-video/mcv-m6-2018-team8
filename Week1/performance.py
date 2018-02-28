@@ -29,7 +29,7 @@ def performance(gt, test):
         elif y_test[i]==0 and y_gt[i]==1:
            FN += 1 # pixels falsely detected as background
 
-        sys.stdout.write("\r>  Computing  {:.2f}/{} ... ".format(i, total))
-        # sys.stdout.flush()
+        sys.stdout.write("\r>  Computing  {:.2f}%".format(100*i/total, 100))
+        sys.stdout.flush()
 
     return TP, FP, TN, FN, y_gt, y_test

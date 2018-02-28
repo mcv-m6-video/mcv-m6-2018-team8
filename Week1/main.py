@@ -17,9 +17,9 @@ if __name__ == "__main__":
         input_db = Database(abs_dir_input, start_frame=start_frame, end_frame=end_frame)
         results_db = Database(abs_dir_result, start_frame=0)
 
-        gt = gt_db.loadDB()
-        input = input_db.loadDB()
-        res = results_db.loadDB()
+        gt = gt_db.loadDB(im2double=True)
+        input = input_db.loadDB(im2double=True)
+        res = results_db.loadDB(im2double=True)
 
     elif DATABASE == "kitti":
         start_frame = 0

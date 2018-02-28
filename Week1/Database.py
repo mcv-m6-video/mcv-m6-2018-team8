@@ -4,11 +4,6 @@ import os
 import glob
 import numpy as np
 
-def im2double(im):
-    max = 0.001 if np.max(im) == 0 else np.max(im)
-    im = cv2.convertScaleAbs(im, alpha=np.iinfo(im.dtype).max / max)
-    return im
-
 class Database:
     def __init__(self, db_dir, start_frame = 0, end_frame=-1):
         self.db_dir = db_dir
@@ -30,8 +25,10 @@ class Database:
         for id, file in enumerate(files):
 
             im = cv2.imread(file, im_color)
+
             if im2double:
-                im = im2double(im)
+                im = self.im2double(im)
+
             if im_show:
                 cv2.imshow("frame", im)
                 cv2.waitKey(1)
@@ -43,3 +40,9 @@ class Database:
         sys.stdout.write("Loaded!\n")
 
         return np.array(db)
+
+    def im2double(sef, im):
+        max = 0.001 if np.max(im) == 0 else np.max(im)
+        im = cv2.convertScaleAbs(im, alpha=np.iinfo(im.dtype).max / max)
+
+        return im
