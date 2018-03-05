@@ -10,11 +10,11 @@ From main.py it can be executed all the code provided for us.
 
 ## Configuration
 
-The configuration of the database used is in the config.py file. We specify which dataset we want to use. 
+The configuration of the database used is in the config.py file. You can specify which dataset you want to use and the names of the root folder and their respective subfolders (Ground Truth and Input images).
 
 ## Database
 
-The way how we read and load the files of the dataset.
+The way how we read and load the files of the dataset. 
 
 ## Task 1
 
