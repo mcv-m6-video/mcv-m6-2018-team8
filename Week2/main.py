@@ -66,9 +66,6 @@ if __name__ == "__main__":
     plt.axis([0, max(array_alpha), 0, max(fscore_list)+0.2])
     plt.show()
 
-    # task3
-    method1 = cv2.createBackgroundSubtractorMOG2()
-
     # plt.step(recall_list, precision_list, color='b', alpha=0.2, where='post')
     # plt.fill_between(recall_list, precision_list, step='post', alpha=0.2, color='b')
     # plt.xlabel('Recall')

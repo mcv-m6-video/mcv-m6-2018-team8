@@ -19,9 +19,9 @@ class Database:
         if self.end_frame == -1:
             files = file_images[self.start_frame:]
         else:
-            files = file_images[self.start_frame:self.end_frame]
+            files = file_images[self.start_frame:self.end_frame+1]
 
-        print("Number of files: {}".format(len(files)))
+        print("Number of files: {} (from {} to {})".format(len(files), self.start_frame+1, self.end_frame))
 
         db = []
         for id, file in enumerate(files):
