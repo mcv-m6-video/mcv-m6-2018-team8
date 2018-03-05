@@ -2,17 +2,16 @@ import sys
 sys.path.append('../.')
 from common.config import *
 from common.Database import *
-# from common.metrics import *
-
 from OneSingleGaussian import *
 from performanceW2 import *
 from metrics import *
 import matplotlib.pyplot as plt
 from sklearn.metrics import auc
+import cv2
 
 if __name__ == "__main__":
 
-    start_frame = 1051
+    start_frame = 1050
     end_frame = 1350
     gt_db = Database(abs_dir_gt, start_frame=start_frame, end_frame=end_frame)
     input_db = Database(abs_dir_input, start_frame=start_frame, end_frame=end_frame)
@@ -20,12 +19,11 @@ if __name__ == "__main__":
 
     gt = gt_db.loadDB(im_color=False)
     input = input_db.loadDB(im_color=False)
-    res = results_db.loadDB(im_color=False)
+    #res = results_db.loadDB(im_color=False)
 
-    res_A = res[:200] #testA
-    res_B = res[200:] #tsetB
+    #res_A = res[:200] #testA
+    #res_B = res[200:] #testB
 
-    # array_alpha = [0, 1, 1.5, 2, 2.5, 3, 3.5, 4]
     array_alpha = np.arange(0,10,0.2)
     matrix_mean, matrix_std, gt_test = OneSingleGaussian(input, array_alpha, im_show=False)
 
@@ -34,8 +32,13 @@ if __name__ == "__main__":
     #
     # cv2.waitKey(0)
 
-    gt = gt[150:]
-    TP_list, FP_list, TN_list, FN_list = performanceW2(gt, gt_test)
+    # cv2.imwrite("matrix_mean_fall2.png", matrix_mean)
+    # cv2.imshow("Matrix Mean", matrix_mean)
+    # cv2.imwrite("matrix_std_fall2.png", matrix_std)
+    # cv2.imshow("Matrix Std", matrix_std)
+
+    gt2 = gt[(len(gt)/2):]
+    TP_list, FP_list, TN_list, FN_list = performanceW2(gt2, gt_test)
 
     print("Summary: TP, FP, TN, FN for each alpha\n")
     print(" -------------------------------------- ")
@@ -43,7 +46,7 @@ if __name__ == "__main__":
         print("For alpha = {} - TP: {}, FP: {}, TN: {}, FN: {}".format(alpha, TP_list[id], FP_list[id], TN_list[id], FN_list[id]))
     print(" -------------------------------------- ")
 
-    precision_list, recall_list, fscore_list, accuracy_list = metrics(TP_list, FP_list, TN_list, FN_list, gt, gt_test)
+    precision_list, recall_list, fscore_list, accuracy_list = metrics(TP_list, FP_list, TN_list, FN_list, gt2, gt_test)
     area_auc = auc(recall_list, precision_list)
 
     print("Summary: Precision, Recall, F1-Score, Accuracy for each alpha\n")
@@ -57,7 +60,6 @@ if __name__ == "__main__":
     x = np.linspace(0, array_alpha[-1], len(array_alpha))
     plt.figure(1)
     plt.plot(x, fscore_list, 'b', label='F1-score')
-    #plt.plot(x, 'r', label='Total Foreground pixels')
     plt.legend(loc='lower right')
     plt.xlabel("Alpha")
     plt.ylabel("F1-score")
