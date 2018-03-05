@@ -9,7 +9,7 @@ ChangeDetection Metrics
 """
 def metrics(TP, FP, TN, FN, y_gt, y_test):
 
-    confusion_mat = confusion_matrix(np.ravel(y_gt), np.ravel(y_test))
+    confusion_mat = confusion_matrix(y_gt, y_test)
 
     precision = float(TP)/float(TP+FP)
     recall = float(TP)/float(TP + FN)
@@ -20,6 +20,8 @@ def metrics(TP, FP, TN, FN, y_gt, y_test):
     auc = roc_auc_score(y_gt, y_test) # provides a numerical assessement of the quality of the system.
 
     return confusion_mat, precision, recall, fscore, accuracy, auc
+
+
 
 """
 Read OpticalFLow uint16 images
