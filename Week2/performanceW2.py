@@ -45,7 +45,7 @@ def performanceW2(gt, gt_test, array_params=None):
         TN_list.append(TN)
         FN_list.append(FN)
 
-        sys.stdout.write("\r>  Computing ... {:.2f}%".format(a * 100 / dim))
+        sys.stdout.write("\r>  Computing ... {:.2f}%".format((a+1) * 100 / dim))
         sys.stdout.flush()
 
     print("\n\nSummary: TP, FP, TN, FN")
