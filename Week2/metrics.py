@@ -40,7 +40,7 @@ def metrics(TP, FP, TN, FN, y_test, array_params=None):
     else:
         for id, alpha in enumerate(array_params):
             print("For alpha = {} - Precision: {:.4f} \tRecall: {:.4f} \tF1-Score: {:.4f} \tAccuracy: {:.4f}".format(alpha, precision_list[id], recall_list[id], fscore_list[id], accuracy_list[id]))
-        print("AUC: {}".format(getAUC(precision_list, recall_list)))
+        print("AUC: {}".format(getAUC(recall_list, precision_list)))
         print("Best F1-Score is {:.4f} with alpha {:.4f}".format(np.max(fscore_list),array_params[np.argmax(fscore_list)]))
         print("------------------------------------------------------------")
 
@@ -60,4 +60,25 @@ def plotF1Score(x_axis, y_axis):
     plt.xlabel("Alpha")
     plt.ylabel("F1-score")
     plt.axis([0, max(x_axis), 0, max(y_axis)]) # [xmin, xmax, ymin, ymax]
+    plt.show()
+
+def plotPrecisionRecall(recall_axis, precision_axis, label=''):
+    plt.figure()
+    plt.plot(recall_axis, precision_axis, 'r', label=label)
+    plt.legend(loc='upper right')
+    plt.title("Precision-Recall")
+    plt.xlabel("Recall")
+    plt.ylabel("Precision")
+    plt.ylim([np.min(precision_axis), 1])
+    plt.xlim([np.min(recall_axis), 1])
+    plt.show()
+
+    plt.figure()
+    plt.step(recall_axis, precision_axis, color='b', alpha=0.2, where='post')
+    plt.fill_between(recall_axis, precision_axis, step='post', alpha=0.2, color='b')
+    plt.xlabel('Recall')
+    plt.ylabel('Precision')
+    plt.ylim([np.min(precision_axis), 1])
+    plt.xlim([np.min(recall_axis), 1])
+    plt.title('Precision-Recall curve: AP={0:0.2f}'.format(np.mean(precision_axis)))
     plt.show()

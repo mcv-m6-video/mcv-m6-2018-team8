@@ -40,35 +40,111 @@ if __name__ == "__main__":
     gt = gt_db.loadDB(im_color=False)
     input = input_db.loadDB(im_color=True)
 
+    methods = ["MOG", "MOG2", "GMG", "Subsense", "Lobster"]
+
+
     # Task3_ compare with different methods
-    if isCV2():
-        """
-        BGSubstractorMOG
-        """
-        bg_substracttor = cv2.BackgroundSubtractorMOG()
-        x_mask = extractBackgroundSubtrasctor_CV(bg_substracttor, data=input, im_show=False)
-        print("\n\nBackgroundSubtractorMOG Method (from OpenCV {})".format(cv2.__version__))
-        TP_list, FP_list, TN_list, FN_list = performanceW2(gt, x_mask)
-        precision_list, recall_list, fscore_list, accuracy_list = metrics(TP_list, FP_list, TN_list, FN_list, x_mask)
+    # if isCV2():
+    """
+    BGSubstractorMOG
+    """
+    params = np.arange(1, 256, 2)
+    x_mask = []
+    print("\n\nBackgroundSubtractorMOG Method (from OpenCV {})".format(cv2.__version__))
+    try:
+        bg_substractor = cv2.bgsegm.createBackgroundSubtractorMOG()#BackgroundSubtractorMOG()
+        for id, p in enumerate(params):
+            bg_substracttor = cv2.bgsegm.createBackgroundSubtractorMOG() #TODO
+            x_mask.append(extractBackgroundSubtrasctor_CV(bg_substractor, data=input, im_show=False))
+            sys.stdout.write("\r>  Computing ... {:.2f}%".format((id + 1) * 100 / len(params)))
+            sys.stdout.flush()
 
-        """
-        BGSubstractorMOG2
-        """
-        bg_substracttor = cv2.BackgroundSubtractorMOG2()
-        x_mask = extractBackgroundSubtrasctor_CV(bg_substracttor, data=input, im_show=False)
-        print("\n\nBackgroundSubtractorMOG2 Method (from OpenCV {})".format(cv2.__version__))
-        TP_list, FP_list, TN_list, FN_list = performanceW2(gt, x_mask)
-        precision_list, recall_list, fscore_list, accuracy_list = metrics(TP_list, FP_list, TN_list, FN_list, x_mask)
+        print("\n")
 
-    else:
-        """
-        BSubtractorGMG
-        """
-        print("\n\nBackgroundSubtractorGMG Method (from OpenCV {})".format(cv2.__version__))
-        bg_substracttor = cv2.createBackgroundSubtractorGMG()
-        x_mask = extractBackgroundSubtrasctor_CV(bg_substracttor, data=input, im_show=False)
-        TP_list, FP_list, TN_list, FN_list = performanceW2(gt, x_mask)
-        precision_list, recall_list, fscore_list, accuracy_list = metrics(TP_list, FP_list, TN_list, FN_list, x_mask)
+        TP_list, FP_list, TN_list, FN_list = performanceW2(gt, x_mask, array_params=params)
+        precision_list, recall_list, fscore_list, accuracy_list = metrics(TP_list, FP_list, TN_list, FN_list, x_mask, array_params=params)
+
+        plotF1Score(np.linspace(0, params[-1], len(params)), fscore_list)
+        plotPrecisionRecall(recall_list, precision_list, label=DATABASE)
+
+    except AttributeError:
+        warnings.warn("BackgroundSubtractorMOG does not exist in your OpenCV {}".format(cv2.__version__))
+
+    """
+    BGSubstractorMOG2
+    """
+    params = np.arange(1, 256, 2)
+    x_mask = []
+    print("\n\nBackgroundSubtractorMOG2 Method (from OpenCV {})".format(cv2.__version__))
+    try:
+        bg_substractor = cv2.createBackgroundSubtractorMOG2()
+        for id, p in enumerate(params):
+            bg_substractor = cv2.createBackgroundSubtractorMOG2(history=0, varThreshold=p, detectShadows=False)
+            x_mask.append(extractBackgroundSubtrasctor_CV(bg_substractor, data=input, im_show=False))
+            sys.stdout.write("\r>  Computing ... {:.2f}%".format((id + 1) * 100 / len(params)))
+            sys.stdout.flush()
+
+        print("\n")
+
+        TP_list, FP_list, TN_list, FN_list = performanceW2(gt, x_mask, array_params=params)
+        precision_list, recall_list, fscore_list, accuracy_list = metrics(TP_list, FP_list, TN_list, FN_list, x_mask, array_params=params)
+
+        plotF1Score(np.linspace(0, params[-1], len(params)), fscore_list)
+        plotPrecisionRecall(recall_list, precision_list, label=DATABASE)
+
+    except AttributeError:
+        warnings.warn("BackgroundSubtractorMOG2 does not exist in your OpenCV {}".format(cv2.__version__))
+
+    """
+    BSubtractorKNN
+    """
+    params = np.linspace(1, 100, 20)
+    x_mask = []
+    print("\n\nBackgroundSubtractorKNN Method (from OpenCV {})".format(cv2.__version__))
+    try:
+        bg_substractor = cv2.BackgroundSubtractorKNN()
+        for id, p in enumerate(params):
+            bg_substracttor = cv2.createBackgroundSubtractorKNN(history=0, dist2Threshold=p, detectShadows=False)
+            x_mask.append(extractBackgroundSubtrasctor_CV(bg_substractor, data=input, im_show=False))
+            sys.stdout.write("\r>  Computing ... {:.2f}%".format((id + 1) * 100 / len(params)))
+            sys.stdout.flush()
+
+        print("\n")
+
+        TP_list, FP_list, TN_list, FN_list = performanceW2(gt, x_mask, array_params=params)
+        precision_list, recall_list, fscore_list, accuracy_list = metrics(TP_list, FP_list, TN_list, FN_list, x_mask, array_params=params)
+
+        plotF1Score(np.linspace(0, params[-1], len(params)), fscore_list)
+        plotPrecisionRecall(recall_list, precision_list, label=DATABASE)
+
+    except AttributeError:
+        warnings.warn("BackgroundSubtractorMOG2 does not exist in your OpenCV {}".format(cv2.__version__))
+
+
+    """
+    BSubtractorGMG
+    """
+    params = np.linspace(1, 100, 20)
+    x_mask = []
+    print("\n\nBackgroundSubtractorKNN Method (from OpenCV {})".format(cv2.__version__))
+    try:
+        bg_substractor = cv2.bgsegm.createBackgroundSubtractorGMG() #TODO
+        for id, p in enumerate(params):
+            bg_substracttor = cv2.createBackgroundSubtractorKNN(history=0, dist2Threshold=p, detectShadows=False)
+            x_mask.append(extractBackgroundSubtrasctor_CV(bg_substractor, data=input, im_show=False))
+            sys.stdout.write("\r>  Computing ... {:.2f}%".format((id + 1) * 100 / len(params)))
+            sys.stdout.flush()
+
+        print("\n")
+
+        TP_list, FP_list, TN_list, FN_list = performanceW2(gt, x_mask, array_params=params)
+        precision_list, recall_list, fscore_list, accuracy_list = metrics(TP_list, FP_list, TN_list, FN_list, x_mask, array_params=params)
+
+        plotF1Score(np.linspace(0, params[-1], len(params)), fscore_list)
+        plotPrecisionRecall(recall_list, precision_list, label=DATABASE)
+
+    except AttributeError:
+        warnings.warn("BackgroundSubtractorMOG2 does not exist in your OpenCV {}".format(cv2.__version__))
 
     if platform.system() == 'Linux' and platform.machine() == 'x86_64':
         """
@@ -80,4 +156,3 @@ if __name__ == "__main__":
         subsense.release()
         TP_list, FP_list, TN_list, FN_list = performanceW2(gt, x_mask)
         precision_list, recall_list, fscore_list, accuracy_list = metrics(TP_list, FP_list, TN_list, FN_list, x_mask)
-

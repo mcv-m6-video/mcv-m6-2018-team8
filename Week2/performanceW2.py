@@ -10,6 +10,8 @@ def performanceW2(gt, gt_test, array_params=None):
     if isinstance(gt_test, (list,)):
         gt_test = np.array(gt_test)
 
+    print("Performance ...")
+
     gt = np.where((gt <= 50), 0, gt)
     gt = np.where((gt == 255), 1, gt)
     gt = np.where((gt == 85), -1, gt)
@@ -54,7 +56,7 @@ def performanceW2(gt, gt_test, array_params=None):
         print("TP: {}\tFP: {}\tTN: {}\tFN: {}".format(TP_list[0], FP_list[0], TN_list[0], FN_list[0]))
     else:
         for id, param in enumerate(array_params):
-            print("For param = {} - TP: {} \tFP: {} \tTN: {} \tFN: {}".format(param, TP_list[id], FP_list[id], TN_list[id], FN_list[id]))
+            print("For param = {:.4f} - TP: {} \tFP: {} \tTN: {} \tFN: {}".format(param, TP_list[id], FP_list[id], TN_list[id], FN_list[id]))
     print("------------------------------------------------------------")
 
     return TP_list, FP_list, TN_list, FN_list
