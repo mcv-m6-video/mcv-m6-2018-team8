@@ -31,6 +31,8 @@ class Database:
                 pass
             elif color_space == "HSV":
                 im = cv2.cvtColor(im, cv2.COLOR_BGR2HSV)
+            else:
+                raise ValueError("{} does not exist! use BGR or HSV".format(color_space))
 
             if normImage:
                 im = self.normImage(im)
