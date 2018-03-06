@@ -36,10 +36,10 @@ def metrics(TP, FP, TN, FN, y_test, array_params=None):
     print("\nSummary: Precision, Recall, F1-Score, Accuracy for each alpha")
     print("------------------------------------------------------------")
     if array_params is None:
-        print("Precision: {:.4f}\tRecall: {:.4f}\tF1-Score: {:.4f}\tAccuracy: {:.4f}".format(precision_list[0],recall_list[0],fscore_list[0],accuracy_list[0]))
+        print("Precision: {:.4f} \tRecall: {:.4f} \tF1-Score: {:.4f} \tAccuracy: {:.4f}".format(precision_list[0],recall_list[0],fscore_list[0],accuracy_list[0]))
     else:
         for id, alpha in enumerate(array_params):
-            print("For alpha = {} - Precision: {:.4f}\tRecall: {:.4f}\tF1-Score: {:.4f}\tAccuracy: {:.4f}".format(alpha, precision_list[id], recall_list[id], fscore_list[id], accuracy_list[id]))
+            print("For alpha = {} - Precision: {:.4f} \tRecall: {:.4f} \tF1-Score: {:.4f} \tAccuracy: {:.4f}".format(alpha, precision_list[id], recall_list[id], fscore_list[id], accuracy_list[id]))
         print("AUC: {}".format(getAUC(precision_list, recall_list)))
         print("Best F1-Score is {:.4f} with alpha {:.4f}".format(np.max(fscore_list),array_params[np.argmax(fscore_list)]))
         print("------------------------------------------------------------")

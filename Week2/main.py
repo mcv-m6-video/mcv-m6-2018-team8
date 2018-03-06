@@ -7,7 +7,6 @@ from performanceW2 import *
 from metrics import *
 import matplotlib.pyplot as plt
 from sklearn.metrics import auc
-import cv2
 
 if __name__ == "__main__":
 
@@ -38,24 +37,9 @@ if __name__ == "__main__":
     # cv2.imshow("Matrix Std", matrix_std)
 
     gt2 = gt[(len(gt)/2):]
-    TP_list, FP_list, TN_list, FN_list = performanceW2(gt2, gt_test)
-
-    print("Summary: TP, FP, TN, FN for each alpha\n")
-    print(" -------------------------------------- ")
-    for id, alpha in enumerate(array_alpha):
-        print("For alpha = {} - TP: {}, FP: {}, TN: {}, FN: {}".format(alpha, TP_list[id], FP_list[id], TN_list[id], FN_list[id]))
-    print(" -------------------------------------- ")
-
-    precision_list, recall_list, fscore_list, accuracy_list = metrics(TP_list, FP_list, TN_list, FN_list, gt2, gt_test)
+    TP_list, FP_list, TN_list, FN_list = performanceW2(gt2, gt_test, array_params=array_alpha)
+    precision_list, recall_list, fscore_list, accuracy_list = metrics(TP_list, FP_list, TN_list, FN_list, gt_test, array_params=array_alpha)
     area_auc = auc(recall_list, precision_list)
-
-    print("Summary: Precision, Recall, F1-Score, Accuracy for each alpha\n")
-    print(" -------------------------------------- ")
-    for id, alpha in enumerate(array_alpha):
-        print("For alpha = {} - Precision: {:.4f}\t, Recall: {:.4f}\t, F1-Score: {:.4f}\t, Accuracy: {:.4f}".format(alpha, precision_list[id], recall_list[id], fscore_list[id], accuracy_list[id]))
-    print("AUC: {}".format(area_auc))
-    print("Best F1-Score is {:.4f}\t with alpha {:.4f}".format(np.max(fscore_list), array_alpha[np.argmax(fscore_list)]))
-    print(" -------------------------------------- ")
 
     x = np.linspace(0, array_alpha[-1], len(array_alpha))
     plt.figure(1)

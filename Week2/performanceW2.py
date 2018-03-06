@@ -45,7 +45,7 @@ def performanceW2(gt, gt_test, array_params=None):
         TN_list.append(TN)
         FN_list.append(FN)
 
-        sys.stdout.write("\r>  Computing ... {:.2f}%".format(a * dim / 100))
+        sys.stdout.write("\r>  Computing ... {:.2f}%".format(a * 100 / dim))
         sys.stdout.flush()
 
     print("\n\nSummary: TP, FP, TN, FN")
@@ -54,7 +54,7 @@ def performanceW2(gt, gt_test, array_params=None):
         print("TP: {}\tFP: {}\tTN: {}\tFN: {}".format(TP_list[0], FP_list[0], TN_list[0], FN_list[0]))
     else:
         for id, param in enumerate(array_params):
-            print("For param = {} - TP: {}\tFP: {}\tTN: {}\tFN: {}".format(param, TP_list[id], FP_list[id], TN_list[id], FN_list[id]))
+            print("For param = {} - TP: {} \tFP: {} \tTN: {} \tFN: {}".format(param, TP_list[id], FP_list[id], TN_list[id], FN_list[id]))
     print("------------------------------------------------------------")
 
     return TP_list, FP_list, TN_list, FN_list
