@@ -27,16 +27,16 @@ For each Task, we calculate the True Postive, False Positive, True Negative and 
 
 The Performance has two methods, depending on the number of bnarried parameters you want:
 
-- None or 1 barried parameter: `extractPerformance()`
-- Two barried parameters: `extractPerformance_2Params()`
+- None or 1 sweep parameter: `extractPerformance()`
+- Two sweep parameters: `extractPerformance_2Params()`
 
 ### Metrics
 
 For each Task, we also calculate the precision, recall and f1-score in order to obtain the requested metrics.
 
 Methods for metrics:
-- None or 1 barried parameter: `metrics()`
-- Two barried parameters: `metrics_2Params()`
+- None or 1 sweep parameter: `metrics()`
+- Two sweep parameters: `metrics_2Params()`
 - AUC score: `getAUC()`
 - Plot Precision-Recall: `plotPrecisionRecall()`
 - Plot F1-Score (2D): `plotF1Score2D()`
