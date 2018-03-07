@@ -12,7 +12,7 @@ class Database:
 
         assert(self.start_frame >=0)
 
-    def loadDB(self, im_color=cv2.IMREAD_COLOR, im_show=False, normImage=False):
+    def loadDB(self, im_color=cv2.IMREAD_COLOR, im_show=False, normImage=False, color_space="BGR"):
 
         file_images = glob.glob(os.path.join(self.db_dir, "*.png")) + glob.glob(os.path.join(self.db_dir, "*.jpg"))
 
@@ -27,6 +27,12 @@ class Database:
         for id, file in enumerate(files):
 
             im = cv2.imread(file, im_color)
+            if color_space == "BGR":
+                pass
+            elif color_space == "HSV":
+                im = cv2.cvtColor(im, cv2.COLOR_BGR2HSV)
+            else:
+                raise ValueError("{} does not exist! use BGR or HSV".format(color_space))
 
             if normImage:
                 im = self.normImage(im)
@@ -40,6 +46,8 @@ class Database:
             sys.stdout.flush()
 
         sys.stdout.write("Loaded!\n")
+
+        cv2.destroyAllWindows()
 
         return np.array(db)
 
