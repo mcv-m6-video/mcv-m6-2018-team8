@@ -1,6 +1,5 @@
 import numpy as np
 import sys
-# from scipy.stats import threshold
 
 def extractPerformance(gt, gt_test, array_params=None):
 

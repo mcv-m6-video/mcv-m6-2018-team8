@@ -2,7 +2,7 @@ import sys
 sys.path.append('../.')
 from common.config import *
 from common.Database import *
-from OneSingleGaussianAdapt_v2 import *
+from OneSingleGaussianAdapt import *
 from common.extractPerformance import *
 from metrics import *
 
