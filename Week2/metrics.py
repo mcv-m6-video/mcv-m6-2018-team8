@@ -50,8 +50,8 @@ def metrics(TP, FP, TN, FN, y_test, array_params=None):
 """
 Return the AUC (Area Under Curve)
 """
-def getAUC(a,b):
-    return auc(a, b)
+def getAUC(a,b, reorder=True):
+    return auc(a, b, reorder=reorder)
 
 def plotF1Score(x_axis, y_axis):
     plt.figure()

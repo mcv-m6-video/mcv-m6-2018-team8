@@ -9,14 +9,12 @@ from metrics import *
 
 if __name__ == "__main__":
 
-    start_frame = 1050
-    end_frame = 1350
     gt_db = Database(abs_dir_gt, start_frame=start_frame, end_frame=end_frame)
     input_db = Database(abs_dir_input, start_frame=start_frame, end_frame=end_frame)
-    results_db = Database(abs_dir_result, start_frame=0)
+    # results_db = Database(abs_dir_result, start_frame=0)
 
     gt = gt_db.loadDB(im_color=False)
-    input = input_db.loadDB(im_color=True, color_space="HSV", im_show=True)
+    input = input_db.loadDB(im_color=True, color_space="HSV", im_show=False)
 
     params = np.arange(0, 10, 0.2)
     # matrix_mean, matrix_std, gt_test = GaussianColorRGB(input, array_alpha, im_show=False)
@@ -28,3 +26,5 @@ if __name__ == "__main__":
 
     plotF1Score(np.linspace(0, params[-1], len(params)), fscore_list)
     plotPrecisionRecall(recall_list, precision_list, label=DATABASE)
+
+    a = 1
