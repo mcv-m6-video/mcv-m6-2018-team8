@@ -94,7 +94,7 @@ def plotF1Score2D(x_axis, y_axis):
     plt.legend(loc="lower right")
     plt.xlabel("Alpha")
     plt.ylabel("F1-score")
-    plt.axis([0, max(x_axis), 0, max(y_axis)]) # [xmin, xmax, ymin, ymax]
+    plt.axis([0, 1, 0, 1]) # [xmin, xmax, ymin, ymax]
     plt.show()
 
 def plotF1Score3D(x_axis, y_axis, z_axis, label=''):
