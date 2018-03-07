@@ -10,7 +10,7 @@ From main.py it can be executed all the code provided for us.
 
 ## Configuration
 
-The configuration of the database used is in the config.py file. You can specify which dataset you want to use and the names of the root folder and their respective subfolders (Ground Truth and Input images).
+The configur ation of the database used is in the config.py file. You can specify which dataset you want to use and the names of the root folder and their respective subfolders (Ground Truth and Input images).
 
 ## Database
 
@@ -22,11 +22,12 @@ We created the function OneSingleGaussian() inside the python file OneSingleGaus
 
 ## Task 2
 
-We created the function OneSingleGaussianAdapt() inside OneSingleGaussian.py. 
+We created the function OneSingleGaussianAdapt.py. In the training part we obtain the mean and std matrices, then we apply the adaptative model that depends of two arrays of parameters rho and alpha. The goal is to do the adaptive model and improve the results obtained in the non-adaptive gaussian model.  
 
 ## Task 3
 
 ## Task 4
+For this task, we created GaussianColor.py, that have inside GaussianColorRGB() and GaussianColorHSV(), the first function is a foreground/background segmentation based on RGB. If the value of the pixel fall in the background region in the 3 components, this pixel will be background, otherwise, this pixel will be foreground. In GaussianColorHSV() the aproach is based on use Hue and Saturation channels. If the value of the pixel fall in the background region in both components, this pixel will be background. otherwise, this pixel will be foreground.
 
 
 ## Performance
