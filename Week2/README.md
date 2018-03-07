@@ -17,7 +17,7 @@ The idea of this task is to compare several background susbtraction approaches o
 For this task, we created `GaussianColor.py`, that have inside `GaussianColorRGB()` and `GaussianColorHSV()`, the first function is a foreground/background segmentation based on RGB. If the value of the pixel fall in the background region in the 3 components, this pixel will be background, otherwise, this pixel will be foreground. In `GaussianColorHSV()` the approach is based on use Hue and Saturation channels. If the value of the pixel fall in the background region in both components, this pixel will be background. otherwise, this pixel will be foreground.
 
 ## Execution usage
-#### OneSingleGaussian and OneSingleGaussianAdapt (Task 1.x - 2.x)
+### OneSingleGaussian and OneSingleGaussianAdapt (Task 1.x - 2.x)
 Execute the main.py to execute the `OneSingleGaussian` or `OneSingleGaussianAdapt` and extract barried parameters by using `extractPerformance` and `extractPerformance_2Params` function, respectively.
 These functions are expected to have the input input images with the array of params (eg. nunmpy.linspace(0,5,10))
 
@@ -26,7 +26,7 @@ By now you have to change the functions you want to use by commenting lines.
 $ python main.py
 ```
 
-#### Comparision of methods of the state-of-the-art and OneSingleGaussianAdapt (Task 3)
+### Comparision of methods of the state-of-the-art and OneSingleGaussianAdapt (Task 3)
 
 The methods available to compare are the following:
 - MOG (OpenCV 3.1.0 [documentation ](https://docs.opencv.org/3.1.0/d6/da7/classcv_1_1bgsegm_1_1BackgroundSubtractorMOG.html))
@@ -53,7 +53,7 @@ Execute the code:
 $ python comapare-methods.py
 ```
 
-#### Color-based approaches (Task 4)
+### Color-based approaches (Task 4)
 RGB color-base: `GaussianColorRGB()`
 HSV color-base: `GaussianColorHSV()`
 
