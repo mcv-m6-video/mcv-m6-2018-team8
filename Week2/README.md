@@ -18,7 +18,7 @@ For this task, we created `GaussianColor.py`, that have inside `GaussianColorRGB
 
 ## Execution usage
 ### OneSingleGaussian and OneSingleGaussianAdapt (Task 1.x - 2.x)
-Execute the main.py to execute the `OneSingleGaussian` or `OneSingleGaussianAdapt` and extract barried parameters by using `extractPerformance` and `extractPerformance_2Params` function, respectively.
+Execute the `main.py` to execute the `OneSingleGaussian()` or `OneSingleGaussianAdapt()` method and extract the barried parameters by using `extractPerformance()` or `extractPerformance_2Params()` function, respectively.
 These functions are expected to have the input input images with the array of params (eg. nunmpy.linspace(0,5,10))
 
 By now you have to change the functions you want to use by commenting lines.
