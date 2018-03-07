@@ -54,8 +54,8 @@ $ python comapare-methods.py
 ```
 
 ### Color-based approaches (Task 4)
-RGB color-base: `GaussianColorRGB()`
-HSV color-base: `GaussianColorHSV()`
+- RGB color-base: `GaussianColorRGB()`
+- HSV color-base: `GaussianColorHSV()`
 
 By now you have to change the functions you want to use by commenting lines.
 
