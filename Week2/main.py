@@ -10,7 +10,7 @@ if __name__ == "__main__":
 
     gt_db = Database(abs_dir_gt, start_frame=start_frame, end_frame=end_frame)
     input_db = Database(abs_dir_input, start_frame=start_frame, end_frame=end_frame)
-    results_db = Database(abs_dir_result, start_frame=0)
+    # results_db = Database(abs_dir_result, start_frame=0)
 
     gt = gt_db.loadDB(im_color=False)
     input = input_db.loadDB(im_color=False)

@@ -3,7 +3,8 @@ import platform
 sys.path.append('../.')
 from common.config import *
 from common.Database import *
-from performanceW2 import *
+# from performanceW2 import *
+from common.extractPerformance import *
 from metrics import *
 from OneSingleGaussian import *
 from thirdparty.Subsense import *
@@ -58,11 +59,11 @@ if __name__ == "__main__":
 
         print("\n")
 
-        TP_list, FP_list, TN_list, FN_list = performanceW2(gt, x_mask, array_params=params)
+        TP_list, FP_list, TN_list, FN_list = extractPerformance(gt, x_mask, array_params=params)
         precision_list, recall_list, fscore_list, accuracy_list = metrics(TP_list, FP_list, TN_list, FN_list, x_mask, array_params=params)
 
         if SHOW_PLOT:
-            plotF1Score(np.linspace(0, params[-1], len(params)), fscore_list)
+            plotF1Score2D(np.linspace(0, params[-1], len(params)), fscore_list)
             plotPrecisionRecall(recall_list, precision_list, label=DATABASE)
 
     except AttributeError:
@@ -84,11 +85,11 @@ if __name__ == "__main__":
 
         print("\n")
 
-        TP_list, FP_list, TN_list, FN_list = performanceW2(gt, x_mask, array_params=params)
+        TP_list, FP_list, TN_list, FN_list = extractPerformance(gt, x_mask, array_params=params)
         precision_list, recall_list, fscore_list, accuracy_list = metrics(TP_list, FP_list, TN_list, FN_list, x_mask, array_params=params)
 
         if SHOW_PLOT:
-            plotF1Score(np.linspace(0, params[-1], len(params)), fscore_list)
+            plotF1Score2D(np.linspace(0, params[-1], len(params)), fscore_list)
             plotPrecisionRecall(recall_list, precision_list, label=DATABASE)
 
     except AttributeError:
@@ -110,11 +111,11 @@ if __name__ == "__main__":
 
         print("\n")
 
-        TP_list, FP_list, TN_list, FN_list = performanceW2(gt, x_mask, array_params=params)
+        TP_list, FP_list, TN_list, FN_list = extractPerformance(gt, x_mask, array_params=params)
         precision_list, recall_list, fscore_list, accuracy_list = metrics(TP_list, FP_list, TN_list, FN_list, x_mask, array_params=params)
 
         if SHOW_PLOT:
-            plotF1Score(np.linspace(0, params[-1], len(params)), fscore_list)
+            plotF1Score2D(np.linspace(0, params[-1], len(params)), fscore_list)
             plotPrecisionRecall(recall_list, precision_list, label=DATABASE)
 
     except AttributeError:
@@ -128,11 +129,11 @@ if __name__ == "__main__":
         subsense = Subsense()
         x_mask = extractBackgroundSubtrasctor_CV(subsense, data=input, im_show=False)
         subsense.release()
-        TP_list, FP_list, TN_list, FN_list = performanceW2(gt, x_mask)
+        TP_list, FP_list, TN_list, FN_list = extractPerformance(gt, x_mask)
         precision_list, recall_list, fscore_list, accuracy_list = metrics(TP_list, FP_list, TN_list, FN_list, x_mask)
 
         subsense = Lobster()
         x_mask = extractBackgroundSubtrasctor_CV(subsense, data=input, im_show=False)
         subsense.release()
-        TP_list, FP_list, TN_list, FN_list = performanceW2(gt, x_mask)
+        TP_list, FP_list, TN_list, FN_list = extractPerformance(gt, x_mask)
         precision_list, recall_list, fscore_list, accuracy_list = metrics(TP_list, FP_list, TN_list, FN_list, x_mask)
