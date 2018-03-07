@@ -19,3 +19,39 @@ Team 8:
 - Week 4: Video stabilization (not done yet!)
 - Week 5: Region tracking (not done yet!)
 
+## Common Files and Metrics
+
+### Peformance
+
+For each Task, we calculate the True Postive, False Positive, True Negative and False Negative values for each case.
+
+The Performance has two methods, depending on the number of bnarried parameters you want:
+
+- None or 1 barried parameter: `extractPerformance()`
+- Two barried parameters: `extractPerformance_2Params()`
+
+### Metrics
+
+For each Task, we also calculate the precision, recall and f1-score in order to obtain the requested metrics.
+
+Methods for metrics:
+- None or 1 barried parameter: `metrics()`
+- Two barried parameters: `metrics_2Params()`
+- AUC score: `getAUC()`
+- Plot Precision-Recall: `plotPrecisionRecall()`
+- Plot F1-Score (2D): `plotF1Score2D()`
+- Plot F1-Score (3D): `plotF1Score3D()`
+
+## Configuration
+
+The configuration file is located in `common/config.py`. This file will be upgraded for the new features. You can specify which dataset you want to use, select the names of the root folder and their respective subfolders (Ground Truth and Input images) and other parameters.
+
+## Database
+
+All the database are located in the `database/`. Choose which want to use in the `config.py` file by selection the desired `DATABASE` global variable (view in the file)
+
+The database availables are:
+- Changedetection (Highway)
+- Fall
+- Traffic
+- Kitty (for the Optical Flow apporach)
