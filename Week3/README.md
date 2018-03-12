@@ -7,15 +7,17 @@ This Week's README help us to prepare the environment in order to be able to cod
 ### Task 1
 We have created the python file `Holefilling.py` in order to post-process the results of the best configuration in Week 2 that was the adaptive gaussian model. We have chosen the best rho value and swept the array of alphas (10 points from 0 to 5). The goal is to post-process it with hole filling and improve the results obtained in the adaptive gaussian model of the week before with each dataset.
 
-We have used the function `binary_fill_holes` of the library scipy.ndimage.morphology. 
+We have used the function `binary_fill_holes()` of the library scipy.ndimage.morphology. 
 
 ### Task 2
-
+In this T
 
 ### Task 3
 
 
 ### Task 4
+
+### Task 5
 
 
 ## Execution usage
