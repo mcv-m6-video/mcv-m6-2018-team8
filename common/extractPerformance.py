@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
-import sys
+import warnings
+import sys, os
 
 def extractPerformance(gt, gt_test, array_params=None):
 
@@ -124,14 +125,19 @@ def extractPerformance_2Params(gt, gt_test, array_params_a, array_params_b, im_s
     return TP_list, FP_list, TN_list, FN_list
 
 def checkImageForVisualise(im):
+
     if isinstance(im, (list,)):
         im = np.array(im)
 
-    if not np.array_equal(np.unique(im), [0, 1]):
-        im[im<0] = 0
+    if im.dtype == 'bool':
+        if not np.array_equal(np.unique(im), [0, 1]):
+            im[im < 0] = 0
 
-    if not im.dtype == 'uint8':
         im = im.astype(np.uint8)
+
+    elif not im.dtype == 'uint8':
+        im = im.astype(np.uint8)
+        warnings.warn("The {} image it should be uint8 and it may not be displayed correctly.".format(im.dtype))
 
     return im
 
@@ -148,3 +154,31 @@ def compareImages(input_a, input_b, delay_ms=0):
         cv2.imshow("Input B", cv2.convertScaleAbs(input_b[i], alpha=np.iinfo(input_b[i].dtype).max / np.amax(input_b[i])))
 
         cv2.waitKey(delay_ms)
+
+    cv2.destroyAllWindows()
+
+def MakeYourGIF(input, path_to_save='video.gif'):
+
+    if isinstance(input, (list,)):
+        input = np.array(input)
+
+    assert(input.ndim <= 3)
+
+    input = checkImageForVisualise(input)
+
+    import imageio
+    with imageio.get_writer(path_to_save, mode='I') as writer:
+
+        for i, file in enumerate(input):
+            file = cv2.convertScaleAbs(file, alpha=np.iinfo(file.dtype).max / np.amax(file))
+            cv2.imshow("", file)
+            cv2.waitKey(1)
+
+            writer.append_data(file)
+
+            sys.stdout.write("\r>  Making GIF {} ... {:.2f}%".format(os.path.basename(path_to_save), i*100/len(input)))
+            sys.stdout.flush()
+
+        print("")
+
+        cv2.destroyAllWindows()

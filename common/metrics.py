@@ -5,7 +5,8 @@ from matplotlib.ticker import FuncFormatter
 from mpl_toolkits.mplot3d import Axes3D
 from mpl_toolkits import mplot3d
 from datetime import datetime
-
+from common.config import *
+import warnings
 
 """
 Read OpticalFLow uint16 images
@@ -164,9 +165,21 @@ def metrics_2Params(TP, FP, TN, FN, array_params_a, array_params_b):
             total_id += 1
     print("AUC: {}".format(getAUC(recall_list, precision_list)))
     print("Best F1-Score is {:.4f} with params = {:.4f} | {:.4f}".format(np.max(fscore_list),array_params_a[np.argmax(fscore_list)//len(array_params_b)], array_params_b[np.argmax(fscore_list)%len(array_params_b)]))
+    print("Worst F1-Score is {:.4f} with params = {:.4f} | {:.4f}".format(np.min(fscore_list), array_params_a[
+        np.argmin(fscore_list) // len(array_params_b)], array_params_b[np.argmin(fscore_list) % len(array_params_b)]))
     print("------------------------------------------------------------")
 
     return precision_list, recall_list, fscore_list, accuracy_list
+
+"""
+Return the value of the parameter given the index. Useful to depict the desire GIF o plot
+"""
+def findParams(data, index):
+    if index < len(data):
+        warnings.warn("index < len(data)")
+        return -1
+    else:
+        return data[index]
 
 """
 Return the AUC (Area Under Curve)
@@ -185,7 +198,9 @@ def plotF1Score2D(x_axis, y_axis):
     plt.savefig("f1score2d_{}.png".format(datetime.now().strftime('%d%m%y_%H-%M-%S')), bbox_inches='tight', frameon=False)
     # plt.show()
 
-def plotF1Score3D(x_axis, y_axis, z_axis, x_label='', y_label='', z_label='', label=''):
+def plotF1Score3D(x_axis, y_axis, z_axis, x_label='', y_label='', z_label='', name=''):
+
+    name = "f1score3d_{}_{}.png".format(datetime.now().strftime('%d%m%y_%H-%M-%S'), DATABASE) if name == '' else name
 
     if isinstance(x_axis, (list,)):
         x_axis = np.array(x_axis)
@@ -207,28 +222,28 @@ def plotF1Score3D(x_axis, y_axis, z_axis, x_label='', y_label='', z_label='', la
     ax.set_ylabel(y_label)
     ax.set_zlabel(z_label)
     plt.colorbar(surf)
-    plt.savefig("f1score3d_{}.png".format(datetime.now().strftime('%d%m%y_%H-%M-%S')), bbox_inches='tight', frameon=False)
+    plt.savefig(name, bbox_inches='tight', frameon=False)
     plt.show()
 
-def plotPrecisionRecall(recall_axis, precision_axis, label=''):
+def plotPrecisionRecall(recall_axis, precision_axis):
     plt.figure()
-    plt.plot(recall_axis, precision_axis, 'r', label=label)
+    plt.plot(recall_axis, precision_axis, 'r')
     plt.legend(loc='upper right')
     plt.title("Precision-Recall")
     plt.xlabel("Recall")
     plt.ylabel("Precision")
     plt.ylim([np.min(precision_axis), 1])
     plt.xlim([np.min(recall_axis), 1])
-    plt.savefig('precision_recall_' + label + '_a.png', bbox_inches='tight', frameon=False)
+    plt.savefig("precision_recall_{}_a.png".format(DATABASE), bbox_inches='tight', frameon=False)
     # plt.show()
 
     plt.figure()
     plt.step(recall_axis, precision_axis, color='b', alpha=0.2, where='post')
     plt.fill_between(recall_axis, precision_axis, step='post', alpha=0.2, color='b')
-    plt.xlabel('Recall')
-    plt.ylabel('Precision')
+    plt.xlabel("Recall")
+    plt.ylabel("Precision")
     plt.ylim([np.min(precision_axis), 1])
     plt.xlim([np.min(recall_axis), 1])
-    plt.title('Precision-Recall curve: AP={0:0.2f}'.format(np.mean(precision_axis)))
-    plt.savefig('precision_recall_' + label + '_b.png', bbox_inches='tight', frameon=False)
+    plt.title("Precision-Recall curve: AP={0:0.2f}".format(np.mean(precision_axis)))
+    plt.savefig("precision_recall_{}_b.png".format(DATABASE), bbox_inches='tight', frameon=False)
     # plt.show()
