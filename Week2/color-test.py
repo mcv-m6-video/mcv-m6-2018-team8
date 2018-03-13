@@ -26,5 +26,3 @@ if __name__ == "__main__":
 
     plotF1Score2D(np.linspace(0, params[-1], len(params)), fscore_list)
     plotPrecisionRecall(recall_list, precision_list, label=DATABASE)
-
-    a = 1
