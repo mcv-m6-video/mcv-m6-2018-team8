@@ -48,7 +48,7 @@ The configuration file is located in `common/config.py`. This file will be upgra
 
 ## Database
 
-All the database are located in the `database/`. Choose which want to use in the `config.py` file by selection the desired `DATABASE` global variable (view in the file)
+All the database are located in the `databases/`. Choose which want to use in the `config.py` file by selection the desired `DATABASE` global variable (view in the file)
 
 The database availables are:
 - Changedetection (Highway)
