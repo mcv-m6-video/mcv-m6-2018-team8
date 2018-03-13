@@ -7,13 +7,16 @@ Configuration File:
 # ---------------- PARAMETERS ---------------- #
 # Change the DATABASE depending on the dataset you want to use
 # DATABASE = "kitti"
-# DATABASE = "changedetection"
-DATABASE = "fall"
+DATABASE = "highway"
+# DATABASE = "fall"
 # DATABASE = "traffic"
 dir_databases = "../databases"
 dir_results = 'results'
 dir_input = 'input'
 dir_gt = 'groundtruth'
+
+GAUSSIAN_METHOD = 'adaptative'
+MORPH_EX = 'closing'
 # -------------------------------------------- #
 
 if DATABASE == "kitti":
@@ -23,12 +26,12 @@ if DATABASE == "kitti":
     abs_dir_gt = os.path.join(dir_databases, DATABASE, "flow_noc")
     abs_dir_input = os.path.join(dir_databases, DATABASE, dir_results)
 
-elif DATABASE == "changedetection":
+elif DATABASE == "highway":
     start_frame = 1050
     end_frame = 1350
-    abs_dir_result = os.path.join(dir_databases, DATABASE, "highway", dir_results)
-    abs_dir_gt = os.path.join(dir_databases, DATABASE, "highway", dir_gt)
-    abs_dir_input = os.path.join(dir_databases, DATABASE, "highway", dir_input)
+    abs_dir_result = os.path.join(dir_databases, "changedetection", DATABASE, dir_results)
+    abs_dir_gt = os.path.join(dir_databases, "changedetection", DATABASE, dir_gt)
+    abs_dir_input = os.path.join(dir_databases, "changedetection", DATABASE, dir_input)
 
 elif DATABASE == "fall":
     #abs_dir_result = os.path.join(dir_databases, DATABASE, dir_results)
