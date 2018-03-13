@@ -27,7 +27,8 @@ We have imported some functions from OpenCV, `cv2.erode()`, `cv2.dilate()` and `
 
 ## Execution usage
 ### Holefilling (Task 1)
+Execute the `task1.py` to execute the `OneSingleGaussianAdapt()` from `GaussianMethods.py`, to apply hole filling `Holefilling()` and extract the sweep parameters by using `extractPerformance_2Params()` function.
 
-
-
-
+```sh
+$ python task1.py
+```
