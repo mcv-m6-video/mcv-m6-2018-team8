@@ -144,9 +144,9 @@ def metrics_2Params(TP, FP, TN, FN, array_params_a, array_params_b):
     for a in range(len(array_params_a)):
         for b in range(len(array_params_b)):
 
-            precision = float(TP[total_id])/float(TP[total_id]+FP[total_id])
+            precision = float(TP[total_id])/float(TP[total_id]+FP[total_id]) if TP[total_id]+FP[total_id] > 0 else 0
             recall = float(TP[total_id])/float(TP[total_id] + FN[total_id])
-            fscore = 2*(float(precision*recall)/float(precision+recall))
+            fscore = 2*(float(precision*recall)/float(precision+recall)) if precision > 0 else 0
             accuracy = float(TP[total_id] + TN[total_id])/float(TP[total_id] + TN[total_id] + FP[total_id] + FN[total_id])
 
             precision_list.append(precision)
@@ -156,20 +156,26 @@ def metrics_2Params(TP, FP, TN, FN, array_params_a, array_params_b):
 
             total_id += 1
 
+    precision_all = np.array(precision_list).reshape(len(array_params_a), len(array_params_b))
+    recall_all = np.array(recall_list).reshape(len(array_params_a), len(array_params_b))
+    accuracy_all = np.array(accuracy_list).reshape(len(array_params_a), len(array_params_b))
+
     print("\nSummary: Precision, Recall, F1-Score, Accuracy for each alpha")
-    print("------------------------------------------------------------")
+    print(":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::")
     total_id = 0
     for id_a, param_a in enumerate(array_params_a):
         for id_b, param_b in enumerate(array_params_b):
             print("For params = {:.4f} | {:.4f} - Precision: {:.4f} \tRecall: {:.4f} \tF1-Score: {:.4f} \tAccuracy: {:.4f}".format(param_a, param_b, precision_list[total_id], recall_list[total_id], fscore_list[total_id], accuracy_list[total_id]))
             total_id += 1
-    print("AUC: {}".format(getAUC(recall_list, precision_list)))
+        print("AUC: {}".format(getAUC(recall_all[id_a], precision_all[id_a], reorder=True)))
+        print("------------------------------------------------------------")
+
     print("Best F1-Score is {:.4f} with params = {:.4f} | {:.4f}".format(np.max(fscore_list),array_params_a[np.argmax(fscore_list)//len(array_params_b)], array_params_b[np.argmax(fscore_list)%len(array_params_b)]))
     print("Worst F1-Score is {:.4f} with params = {:.4f} | {:.4f}".format(np.min(fscore_list), array_params_a[
         np.argmin(fscore_list) // len(array_params_b)], array_params_b[np.argmin(fscore_list) % len(array_params_b)]))
-    print("------------------------------------------------------------")
+    print(":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::")
 
-    return precision_list, recall_list, fscore_list, accuracy_list
+    return precision_all, recall_all, fscore_list, accuracy_all
 
 """
 Return the value of the parameter given the index. Useful to depict the desire GIF o plot
@@ -188,9 +194,19 @@ def getAUC(a,b, reorder=False):
     return np.trapz(a, b)
     # return auc(a, b, reorder=reorder)
 
+def plot2D(x_axis, y_axis, x_label='', y_label=''):
+    plt.figure()
+    plt.plot(x_axis, y_axis, 'b', label=DATABASE)
+    plt.legend(loc="lower right")
+    plt.xlabel(x_label)
+    plt.ylabel(y_label)
+    plt.ylim([0, 1])
+    plt.savefig("plot2d_{}.png".format(datetime.now().strftime('%d%m%y_%H-%M-%S')), bbox_inches='tight', frameon=False)
+    plt.show()
+
 def plotF1Score2D(x_axis, y_axis):
     plt.figure()
-    plt.plot(x_axis, y_axis, 'b', label='F1-Score')
+    plt.plot(x_axis, y_axis, 'b', label=DATABASE)
     plt.legend(loc="lower right")
     plt.xlabel("Alpha")
     plt.ylabel("F1-score")
@@ -227,23 +243,25 @@ def plotF1Score3D(x_axis, y_axis, z_axis, x_label='', y_label='', z_label='', na
 
 def plotPrecisionRecall(recall_axis, precision_axis):
     plt.figure()
-    plt.plot(recall_axis, precision_axis, 'r')
+    plt.plot(recall_axis, precision_axis, 'r', label=DATABASE)
     plt.legend(loc='upper right')
     plt.title("Precision-Recall")
     plt.xlabel("Recall")
     plt.ylabel("Precision")
-    plt.ylim([np.min(precision_axis), 1])
-    plt.xlim([np.min(recall_axis), 1])
-    plt.savefig("precision_recall_{}_a.png".format(DATABASE), bbox_inches='tight', frameon=False)
+    plt.ylim([0, 1])
+    # plt.xlim([0, 1])
+    plt.savefig("precision_recall_{}_{}_a.png".format(DATABASE, datetime.now().strftime('%d%m%y_%H-%M-%S')), bbox_inches='tight', frameon=False)
     # plt.show()
 
     plt.figure()
-    plt.step(recall_axis, precision_axis, color='b', alpha=0.2, where='post')
-    plt.fill_between(recall_axis, precision_axis, step='post', alpha=0.2, color='b')
+    # plt.step(recall_axis, precision_axis, color='b', alpha=0.2, where='post')
+    # plt.fill_between(recall_axis, precision_axis, step='post', alpha=0.2, color='b')
+    plt.plot(recall_axis, precision_axis, '-.g')
+    plt.fill_between(recall_axis, precision_axis, alpha=0.2, color='g')
     plt.xlabel("Recall")
     plt.ylabel("Precision")
     plt.ylim([np.min(precision_axis), 1])
     plt.xlim([np.min(recall_axis), 1])
     plt.title("Precision-Recall curve: AP={0:0.2f}".format(np.mean(precision_axis)))
-    plt.savefig("precision_recall_{}_b.png".format(DATABASE), bbox_inches='tight', frameon=False)
+    plt.savefig("precision_recall_{}_{}_b.png".format(DATABASE, datetime.now().strftime('%d%m%y_%H-%M-%S')), bbox_inches='tight', frameon=False)
     # plt.show()

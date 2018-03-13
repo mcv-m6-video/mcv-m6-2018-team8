@@ -11,18 +11,19 @@ Configuration File:
 DATABASE = "highway"
 # DATABASE = "fall"
 # DATABASE = "traffic"
+
 dir_databases = "../databases"
 dir_results = 'results'
 dir_input = 'input'
 dir_gt = 'groundtruth'
 
 GAUSSIAN_METHOD = 'adaptative'
-MORPH_EX = 'opening'
+MORPH_EX = 'erosion'
 
 # choose the desire strucutre for the morphological operation (cv2 type)
-# MORPH_STRUCTURE = cv2.MORPH_RECT
+MORPH_STRUCTURE = cv2.MORPH_RECT
 # MORPH_STRUCTURE = cv2.MORPH_CROSS
-MORPH_STRUCTURE = cv2.MORPH_ELLIPSE
+# MORPH_STRUCTURE = cv2.MORPH_ELLIPSE
 
 # -------------------------------------------- #
 

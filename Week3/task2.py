@@ -45,7 +45,6 @@ if __name__ == "__main__":
     else:
         matrix_mean, matrix_std, gt_test = OneSingleGaussian(input, array_alpha, im_show=False)
 
-    # area_array = np.arange(20,220,10)
     area_array = np.linspace(20, 220, 10).astype(np.int)
 
     gt_filtered = []
@@ -57,39 +56,23 @@ if __name__ == "__main__":
                 gt_filtered.append(AreaFiltering(gt_test[total_id], area))
                 total_id += 1
 
-    # for area in area_array:
-    #     gt_filtered.append(AreaFiltering(gt_test,area))
-
-
     TP_list, FP_list, TN_list, FN_list = extractPerformance_2Params(gt_train, gt_filtered,
                                                                     array_params_a=area_array, array_params_b=array_alpha,
                                                                     im_show_performance=False)
 
-    precision_list, recall_list, fscore_list, accuracy_list = metrics_2Params(TP_list, FP_list, TN_list, FN_list,
-                                                                              array_params_a=area_array,
-                                                                              array_params_b=array_alpha)
-
-    precision_all = np.array(precision_list).reshape(len(area_array), len(array_alpha))
-    recall_all = np.array(recall_list).reshape(len(area_array), len(array_alpha))
+    precision_all, recall_all, fscore_list, accuracy_all = metrics_2Params(TP_list, FP_list, TN_list, FN_list,
+                                                                           array_params_a=area_array,
+                                                                           array_params_b=array_alpha)
 
     auc_list = getAUC(recall_all, precision_all)
 
-    plotF1Score2D(x_axis=area_array, y_axis=auc_list)
+    plotF1Score3D(x_axis=area_array, y_axis=array_alpha, z_axis=fscore_list, x_label='Area', y_label='Alpha', z_label='F1-Score')
 
-    plotF1Score3D(x_axis=area_array, y_axis=array_alpha, z_axis=auc_list, x_label='Area', y_label='Alpha', z_label='F1-Score')
-    # plotPrecisionRecall(recall_list, precision_list)
-
-    plotPrecisionRecall(recall_all[np.argmax(fscore_list) // len(array_alpha)], precision_all[np.argmax(fscore_list) % len(array_alpha)])
+    # max Precision-Recall
+    plotPrecisionRecall(recall_all[np.argmax(fscore_list) // len(array_alpha)], precision_all[np.argmax(fscore_list) // len(array_alpha)])
 
     final_images = np.array(gt_filtered)
     MakeYourGIF(final_images[np.argmax(fscore_list)],
                 path_to_save='best_case_{}_{}_{}-{}.gif'.format(GAUSSIAN_METHOD, MORPH_EX, MORPH_STRUCTURE, DATABASE))
 
-
-    plt.figure()
-    plt.plot(area_array, auc_list, 'b', label=DATABASE)
-    plt.legend(loc="lower right")
-    plt.xlabel("Pixel area")
-    plt.ylabel("AUC-PR")
-    plt.ylim([0 1])
-    plt.savefig("plot2d_{}.png".format(datetime.now().strftime('%d%m%y_%H-%M-%S')), bbox_inches='tight', frameon=False)
+    plot2D(x_axis=area_array, y_axis=auc_list, x_label="Pixel area", y_label="AUC-PR")

@@ -29,7 +29,7 @@ if __name__ == "__main__":
     gt = gt_db.loadDB(im_color=False)
     input = input_db.loadDB(im_color=False)
 
-    array_alpha = np.linspace(0.1, 5, 10, endpoint=True)
+    array_alpha = np.linspace(0, 5, 10, endpoint=True)
     array_rho = np.array([0.22]) # Highway
     # array_rho = np.array([0.22]) #Fall
     # array_rho = np.array([0.11]) # Traffic
@@ -68,6 +68,27 @@ if __name__ == "__main__":
     TP_list, FP_list, TN_list, FN_list = extractPerformance_2Params(gt_train, gt_test_morph,
                                                                     array_params_a=kernels, array_params_b=array_alpha,
                                                                     im_show_performance=False)
+
+    precision_all, recall_all, fscore_list, accuracy_all = metrics_2Params(TP_list, FP_list, TN_list, FN_list,
+                                                                              array_params_a=kernels, array_params_b=array_alpha)
+
+    # Get AUC-List in a sorted way in 2D (for each parameter)
+    auc_list = getAUC(recall_all, precision_all)
+
+    plot_name = "f1score3d_{}_{}_{}-{}.png".format(datetime.now().strftime('%d%m%y_%H-%M-%S'), MORPH_EX, MORPH_STRUCTURE, DATABASE)
+    plotF1Score3D(x_axis=kernels, y_axis=array_alpha, z_axis=fscore_list, x_label='Kernel',
+                  y_label='Alpha', z_label='F1-score', name=plot_name)
+
+    plotPrecisionRecall(recall_all[np.argmax(fscore_list) // len(array_alpha)], precision_all[np.argmax(fscore_list) // len(array_alpha)])
+
+    final_images = np.array(gt_test_morph)
+    # np.load("metric_{}_{}".format(GAUSSIAN_METHOD, MORPH_EX))
+    # np.load("parameters_{}_{}".format(GAUSSIAN_METHOD, MORPH_EX))
+    MakeYourGIF(final_images[np.argmax(fscore_list)], path_to_save='best_case_{}_{}_{}-{}.gif'.format(GAUSSIAN_METHOD, MORPH_EX, MORPH_STRUCTURE, DATABASE))
+
+    plot2D(x_axis=kernels, y_axis=auc_list, x_label="Kernel size", y_label="AUC-PR")
+
+    # Save parameters
     performance_dict = {}
     performance_dict["TP"] = TP_list
     performance_dict["FP"] = FP_list
@@ -75,19 +96,11 @@ if __name__ == "__main__":
     performance_dict["FN"] = FN_list
     np.save("performanace_{}_{}_{}-{}".format(GAUSSIAN_METHOD, MORPH_EX, MORPH_STRUCTURE, DATABASE), performance_dict)
 
-    precision_list, recall_list, fscore_list, accuracy_list = metrics_2Params(TP_list, FP_list, TN_list, FN_list,
-                                                                              array_params_a=kernels, array_params_b=array_alpha)
-
-    precision_all = np.array(precision_list).reshape(len(kernels), len(array_alpha))
-    recall_all = np.array(recall_list).reshape(len(kernels), len(array_alpha))
-
-    auc_list = getAUC(recall_all, precision_all)
-
     metrics_dict = {}
-    metrics_dict["Precision"] = precision_list
-    metrics_dict["Recall"] = recall_list
+    metrics_dict["Precision"] = precision_all
+    metrics_dict["Recall"] = recall_all
     metrics_dict["F1"] = fscore_list
-    metrics_dict["Accuracy"] = accuracy_list
+    metrics_dict["Accuracy"] = accuracy_all
     np.save("metric_{}_{}_{}-{}".format(GAUSSIAN_METHOD, MORPH_EX, MORPH_STRUCTURE, DATABASE), metrics_dict)
 
     parameters = {}
@@ -98,13 +111,3 @@ if __name__ == "__main__":
     parameters["Kernels"] = kernels
     parameters["MorphEx"] = MORPH_EX
     np.save("parameters_{}_{}_{}-{}".format(GAUSSIAN_METHOD, MORPH_EX, MORPH_STRUCTURE, DATABASE), parameters)
-
-
-    plot_name = "f1score3d_{}_{}_{}-{}.png".format(datetime.now().strftime('%d%m%y_%H-%M-%S'), MORPH_EX, MORPH_STRUCTURE, DATABASE)
-    plotF1Score3D(x_axis=kernels, y_axis=array_alpha, z_axis=fscore_list, x_label='Kernel', y_label='Alpha', z_label='F1-score', name=plot_name)
-    plotPrecisionRecall(recall_list, precision_list)
-
-    final_images = np.array(gt_test_morph)
-    # np.load("metric_{}_{}".format(GAUSSIAN_METHOD, MORPH_EX))
-    # np.load("parameters_{}_{}".format(GAUSSIAN_METHOD, MORPH_EX))
-    MakeYourGIF(final_images[np.argmax(fscore_list)], path_to_save='best_case_{}_{}_{}-{}.gif'.format(GAUSSIAN_METHOD, MORPH_EX, MORPH_STRUCTURE, DATABASE))
