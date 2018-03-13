@@ -6,7 +6,7 @@ import warnings
 
 def OneSingleGaussian(input, array_alpha, im_show=True):
 
-    print("\n ---------- OneSingleGaussian Method ---------- ")
+    print("\n ---------- OneSingleGaussian Method ---------- \n")
     # Training part, for training we only will use the 50% of the data
     data = input[0:len(input) // 2]
     # rows, cols = input.shape[1:]
