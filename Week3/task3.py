@@ -78,6 +78,11 @@ if __name__ == "__main__":
     precision_list, recall_list, fscore_list, accuracy_list = metrics_2Params(TP_list, FP_list, TN_list, FN_list,
                                                                               array_params_a=kernels, array_params_b=array_alpha)
 
+    precision_all = np.array(precision_list).reshape(len(kernels), len(array_alpha))
+    recall_all = np.array(recall_list).reshape(len(kernels), len(array_alpha))
+
+    auc_list = getAUC(recall_all, precision_all)
+
     metrics_dict = {}
     metrics_dict["Precision"] = precision_list
     metrics_dict["Recall"] = recall_list
