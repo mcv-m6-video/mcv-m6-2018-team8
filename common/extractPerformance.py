@@ -1,3 +1,4 @@
+import cv2
 import numpy as np
 import sys
 
@@ -60,7 +61,7 @@ def extractPerformance(gt, gt_test, array_params=None):
 
     return TP_list, FP_list, TN_list, FN_list
 
-def extractPerformance_2Params(gt, gt_test, array_params_a, array_params_b):
+def extractPerformance_2Params(gt, gt_test, array_params_a, array_params_b, im_show_performance=True):
 
     if isinstance(gt, (list,)):
         gt = np.array(gt)
@@ -103,6 +104,9 @@ def extractPerformance_2Params(gt, gt_test, array_params_a, array_params_b):
             TN_list.append(TN)
             FN_list.append(FN)
 
+            if im_show_performance:
+                compareImages(gt, gt_test[total_id], delay_ms=1000)
+
             total_id += 1
 
         sys.stdout.write("\r>  Computing ... {:.2f}%".format((total_id+1)*100 / (len(array_params_a)*len(array_params_b))))
@@ -118,3 +122,29 @@ def extractPerformance_2Params(gt, gt_test, array_params_a, array_params_b):
     print("------------------------------------------------------------")
 
     return TP_list, FP_list, TN_list, FN_list
+
+def checkImageForVisualise(im):
+    if isinstance(im, (list,)):
+        im = np.array(im)
+
+    if not np.array_equal(np.unique(im), [0, 1]):
+        im[im<0] = 0
+
+    if not im.dtype == 'uint8':
+        im = im.astype(np.uint8)
+
+    return im
+
+def compareImages(input_a, input_b, delay_ms=0):
+
+    input_a = checkImageForVisualise(input_a)
+    input_b = checkImageForVisualise(input_b)
+
+    assert(len(input_a) == len(input_b))
+
+    for i in range(len(input_a)):
+        # [0,1] to [0,255]
+        cv2.imshow("Input A", cv2.convertScaleAbs(input_a[i], alpha=np.iinfo(input_a[i].dtype).max / np.amax(input_a[i])))
+        cv2.imshow("Input B", cv2.convertScaleAbs(input_b[i], alpha=np.iinfo(input_b[i].dtype).max / np.amax(input_b[i])))
+
+        cv2.waitKey(delay_ms)
