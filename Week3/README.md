@@ -10,23 +10,44 @@ We have created the python file `Holefilling.py` in order to post-process the re
 We have used the function `binary_fill_holes()` of the library scipy.ndimage.morphology. 
 
 ### Task 2
-
-
+With this approach, we try to reduce the noise in order to improve results by filtering small regions based on their area.
 
 We have used the function `remove_small_objects()` of the library skimage.morphology.
 
 ### Task 3
-In this task, we have explored with other morphological filters and combinations to improve AUC for foreground pixels. We have implemented Opening and Closing.
+In this task, we have explored with other morphological filters and combinations to improve AUC for foreground pixels. We have implemented different Morphological Transformations as Erosion, Dilation, Opening, Closing, Gradient, Top-Hat, Black-Hat.
 
-We have used... 
+We have imported some functions from OpenCV, `cv2.erode()`, `cv2.dilate()` and `cv2.morphologyEx()`.
 
 
 ### Task 4
 
+We have searched for different existing techniques and we have implemented the method "Shadow removal with blob-based morphological reconstruction for error correction" (Xu, Landabaso, Pardàs, ICASSP 2005)
+
 ### Task 5
 
+Here it is time to compare the results respect to the baseline from the Week before.
 
 ## Execution usage
-### Holefilling and OneSingleGaussianAdapt (Task 1.x - 2.x)
+### Hole Filling (Task 1)
+Execute the `task1.py` to execute the `OneSingleGaussianAdapt()` from `GaussianMethods.py`, to apply hole filling `Holefilling()` and extract the sweep parameters by using `extractPerformance_2Params()` function.
+
+```sh
+$ python task1.py
+```
+
+### Area Filtering (Task 2)
+Execute the `task2.py` to execute `AreaFiltering()` to remove noise. 
+
+```sh
+$ python task2.py
+```
+
+### Morphological Transformations (Task 3)
+Execute the `task3.py` to execute `MorphologicalTransformation()` to apply different morphological filters.
+
+```sh
+$ python task3.py
+```
 
 
