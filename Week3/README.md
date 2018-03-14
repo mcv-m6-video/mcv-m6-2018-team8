@@ -29,21 +29,21 @@ We have searched for different existing techniques and we have implemented the m
 Here it is time to compare the results respect to the baseline from the Week before.
 
 ## Execution usage
-### Holefilling (Task 1)
+### Hole Filling (Task 1)
 Execute the `task1.py` to execute the `OneSingleGaussianAdapt()` from `GaussianMethods.py`, to apply hole filling `Holefilling()` and extract the sweep parameters by using `extractPerformance_2Params()` function.
 
 ```sh
 $ python task1.py
 ```
 
-### AreaFiltering (Task 2)
+### Area Filtering (Task 2)
 Execute the `task2.py` to execute `AreaFiltering()` to remove noise. 
 
 ```sh
 $ python task2.py
 ```
 
-### Morphological (Task 3)
+### Morphological Transformations (Task 3)
 Execute the `task3.py` to execute `MorphologicalTransformation()` to apply different morphological filters.
 
 ```sh
