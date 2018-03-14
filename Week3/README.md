@@ -5,7 +5,7 @@ This Week's README help us to prepare the environment in order to be able to cod
 ## Description by Tasks
 
 ### Task 1
-We have created the python file `Holefilling.py` in order to post-process the results of the best configuration in Week 2 that was the adaptive gaussian model (`ÒneSingleGaussianAdapt()` from Week2). We have chosen the best rho value and swept an array of alphas (10 points from 0 to 5). The goal is to post-process it with hole filling and improve the results obtained in the adaptive gaussian model of the week before with each dataset.
+We have created the python file `Holefilling.py` in order to post-process the results of the best configuration in Week 2 that was the adaptive gaussian model (`OneSingleGaussianAdapt()` from Week2). We have chosen the best rho value and swept an array of alphas (10 points from 0 to 5). The goal is to post-process it with hole filling and improve the results obtained in the adaptive gaussian model of the week before with each dataset.
 
 We have used the function `binary_fill_holes()` of the library scipy.ndimage.morphology. 
 
@@ -48,6 +48,13 @@ Execute the `task3.py` to execute `MorphologicalTransformation()` to apply diffe
 
 ```sh
 $ python task3.py
+```
+
+### Shadow Removal (Task 4)
+Execute the `task4.py` to execute `ShadowRemoval()` to remove the shadows of the foregorund.
+
+```sh
+$ python task4.py
 ```
 
 
