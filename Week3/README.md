@@ -44,9 +44,10 @@ $ python task2.py
 ```
 
 ### Morphological (Task 3)
-Execute the `task3.py`
+Execute the `task3.py` to execute `MorphologicalTransformation()` to apply different morphological filters.
 
 ```sh
 $ python task3.py
 ```
+
 
