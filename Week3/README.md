@@ -55,7 +55,7 @@ Execute the `task4.py` to execute `ShadowRemoval()` to remove the shadows of the
 it has been used an adapted version of Xu, Landabaso, Pardàs, Shadow removal with blob-based morphological reconstruction for error correction, ICASSP 2005
 
 ```sh
-$ python task3.py
+$ python task4.py
 ```
 
 
