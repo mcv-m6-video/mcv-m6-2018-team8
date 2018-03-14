@@ -1,12 +1,10 @@
 import sys
 sys.path.append('../.')
-from common.config import *
 from common.Database import *
 from methods.GaussianMethods import *
 from common.extractPerformance import *
 from common.metrics import *
-import matplotlib.pyplot as plt
-from AreaFiltering import *
+from methods.AreaFiltering import *
 
 def checkFilesNPY(dir="."):
     if not os.path.isfile(os.path.join(dir,"gt_test_{}.npy".format(DATABASE))):
