@@ -22,7 +22,7 @@ We have imported some functions from OpenCV, `cv2.erode()`, `cv2.dilate()` and `
 
 ### Task 4
 
-
+We have searched for different existing techniques and we have implemented the method "Shadow removal with blob-based morphological reconstruction for error correction" (Xu, Landabaso, Pardàs, ICASSP 2005)
 
 ### Task 5
 
