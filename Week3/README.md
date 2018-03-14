@@ -10,7 +10,7 @@ We have created the python file `Holefilling.py` in order to post-process the re
 We have used the function `binary_fill_holes()` of the library scipy.ndimage.morphology. 
 
 ### Task 2
-In this approach, we try to reduce the noise in order to improve results by filtering small regions based on their area.
+With this approach, we try to reduce the noise in order to improve results by filtering small regions based on their area.
 
 We have used the function `remove_small_objects()` of the library skimage.morphology.
 
@@ -22,8 +22,11 @@ We have imported some functions from OpenCV, `cv2.erode()`, `cv2.dilate()` and `
 
 ### Task 4
 
+
+
 ### Task 5
 
+Here it is time to compare the results respect to the baseline from the Week before.
 
 ## Execution usage
 ### Holefilling (Task 1)
@@ -32,3 +35,18 @@ Execute the `task1.py` to execute the `OneSingleGaussianAdapt()` from `GaussianM
 ```sh
 $ python task1.py
 ```
+
+### AreaFiltering (Task 2)
+Execute the `task2.py` to execute `AreaFiltering()` to remove noise. 
+
+```sh
+$ python task2.py
+```
+
+### Morphological (Task 3)
+Execute the `task3.py`
+
+```sh
+$ python task3.py
+```
+
