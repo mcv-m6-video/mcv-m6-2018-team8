@@ -72,10 +72,10 @@ def extractPerformance_2Params(gt, gt_test, array_params_a, array_params_b, im_s
 
     print("Performance ...")
 
-    gt = np.where((gt <= 50), 0, gt)
-    gt = np.where((gt == 255), 1, gt)
-    gt = np.where((gt == 85), -1, gt)
-    gt = np.where((gt == 170), -1, gt)
+    gt = np.where((gt <= 50), 0, gt) #Static
+    gt = np.where((gt == 255), 1, gt) #Motion
+    gt = np.where((gt == 85), -1, gt) #Unknown
+    gt = np.where((gt == 170), -1, gt) #Unknown
 
     if not np.array_equal(np.unique(gt_test), [0, 1]):
         gt_test[gt_test!=0] = 1

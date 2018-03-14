@@ -31,7 +31,7 @@ if __name__ == "__main__":
     gt = gt_db.loadDB(im_color=False)
     input = input_db.loadDB(im_color=False)
 
-    array_alpha = np.linspace(0.1, 5, 10, endpoint=True)
+    array_alpha = np.linspace(0, 5, 10, endpoint=True)
     array_rho = np.array([0.22])  # Highway
     # array_rho = np.array([0.22]) #Fall
     # array_rho = np.array([0.11]) # Traffic
@@ -45,7 +45,11 @@ if __name__ == "__main__":
     else:
         matrix_mean, matrix_std, gt_test = OneSingleGaussian(input, array_alpha, im_show=False)
 
-    area_array = np.linspace(20, 220, 10).astype(np.int)
+    TP_list, FP_list, TN_list, FN_list = extractPerformance_2Params(gt_train, gt_test,
+                                                                    array_params_a=array_alpha,
+                                                                    array_params_b=array_rho,
+                                                                    im_show_performance=False)
+    area_array = np.linspace(1, 1000, 10).astype(np.int)
 
     gt_filtered = []
     for i, area in enumerate(area_array):

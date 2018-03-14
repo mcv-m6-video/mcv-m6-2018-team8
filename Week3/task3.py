@@ -42,6 +42,14 @@ if __name__ == "__main__":
     else:
         matrix_mean, matrix_std, gt_test = OneSingleGaussian(input, array_alpha, im_show=False)
 
+    TP_list, FP_list, TN_list, FN_list = extractPerformance_2Params(gt_train, gt_test,
+                                                                    array_params_a=array_alpha, array_params_b=array_rho,
+                                                                    im_show_performance=False)
+
+    pr, re, fscore_list, accuracy_all = metrics_2Params(TP_list, FP_list, TN_list, FN_list,
+                                                                           array_params_a=array_alpha,
+                                                                           array_params_b=array_rho)
+
 
     """
     Sweep the kernel size of the Structure Element for the Morphological Operations
@@ -63,8 +71,6 @@ if __name__ == "__main__":
                 # compareImages(gt_test[total_id], gt_test_morph[total_id], delay_ms=10)
                 total_id += 1
 
-    np.save("gt_test_{}_{}-{}".format(GAUSSIAN_METHOD, MORPH_EX, DATABASE), gt_test_morph)
-
     TP_list, FP_list, TN_list, FN_list = extractPerformance_2Params(gt_train, gt_test_morph,
                                                                     array_params_a=kernels, array_params_b=array_alpha,
                                                                     im_show_performance=False)
@@ -82,32 +88,20 @@ if __name__ == "__main__":
     plotPrecisionRecall(recall_all[np.argmax(fscore_list) // len(array_alpha)], precision_all[np.argmax(fscore_list) // len(array_alpha)])
 
     final_images = np.array(gt_test_morph)
-    # np.load("metric_{}_{}".format(GAUSSIAN_METHOD, MORPH_EX))
-    # np.load("parameters_{}_{}".format(GAUSSIAN_METHOD, MORPH_EX))
     MakeYourGIF(final_images[np.argmax(fscore_list)], path_to_save='best_case_{}_{}_{}-{}.gif'.format(GAUSSIAN_METHOD, MORPH_EX, MORPH_STRUCTURE, DATABASE))
 
     plot2D(x_axis=kernels, y_axis=auc_list, x_label="Kernel size", y_label="AUC-PR")
 
-    # Save parameters
-    performance_dict = {}
-    performance_dict["TP"] = TP_list
-    performance_dict["FP"] = FP_list
-    performance_dict["TN"] = TN_list
-    performance_dict["FN"] = FN_list
-    np.save("performanace_{}_{}_{}-{}".format(GAUSSIAN_METHOD, MORPH_EX, MORPH_STRUCTURE, DATABASE), performance_dict)
-
-    metrics_dict = {}
-    metrics_dict["Precision"] = precision_all
-    metrics_dict["Recall"] = recall_all
-    metrics_dict["F1"] = fscore_list
-    metrics_dict["Accuracy"] = accuracy_all
-    np.save("metric_{}_{}_{}-{}".format(GAUSSIAN_METHOD, MORPH_EX, MORPH_STRUCTURE, DATABASE), metrics_dict)
-
-    parameters = {}
-    parameters["Database"] = DATABASE
-    parameters["GaussianMethod"] = GAUSSIAN_METHOD
-    parameters["Alpha"] = array_alpha
-    parameters["Rho"] = array_rho
-    parameters["Kernels"] = kernels
-    parameters["MorphEx"] = MORPH_EX
-    np.save("parameters_{}_{}_{}-{}".format(GAUSSIAN_METHOD, MORPH_EX, MORPH_STRUCTURE, DATABASE), parameters)
+    # Comparision
+    plt.figure()
+    plt.plot(recall_all[np.argmax(fscore_list) // len(array_alpha)],
+             precision_all[np.argmax(fscore_list) // len(array_alpha)], 'g', label="Baseline + MorphEx (AUC {0:.2f})".format(np.max(auc_list)))
+    plt.plot(re, pr, '--b', label="Baseline (AUC {0:.2f})".format(getAUC(re.reshape(10),pr.reshape(10))))
+    plt.legend(loc='lower left')
+    plt.title("Precision-Recall")
+    plt.xlabel("Recall")
+    plt.ylabel("Precision")
+    plt.ylim([0, 1])
+    # plt.xlim([0, 1])
+    plt.savefig("baseline_vs_other_{}_{}_a.png".format(DATABASE, datetime.now().strftime('%d%m%y_%H-%M-%S')), bbox_inches='tight', frameon=False)
+    plt.show()

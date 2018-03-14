@@ -18,7 +18,7 @@ dir_input = 'input'
 dir_gt = 'groundtruth'
 
 GAUSSIAN_METHOD = 'adaptative'
-MORPH_EX = 'erosion'
+MORPH_EX = 'opening'
 
 # choose the desire strucutre for the morphological operation (cv2 type)
 MORPH_STRUCTURE = cv2.MORPH_RECT
