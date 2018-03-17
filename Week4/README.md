@@ -17,27 +17,27 @@ We have created the python file
 
 
 ## Execution usage
-### Hole Filling (Task 1)
+### (Task 1)
 Execute the `task1.py` to execute 
 
 ```sh
 $ python task1.py
 ```
 
-### Area Filtering (Task 2)
+### (Task 2)
 Execute the `task2.py` to execute 
 ```sh
 $ python task2.py
 ```
 
-### Morphological Transformations (Task 3)
+### (Task 3)
 Execute the `task3.py` to execute 
 
 ```sh
 $ python task3.py
 ```
 
-### Shadow Removal (Task 4)
+### (Task 4)
 Execute the `task4.py` to execute 
 
 ```sh
