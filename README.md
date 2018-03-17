@@ -16,7 +16,7 @@ Team 8:
 - Week 1: Introduction to video sequence analysis and evaluation
 - Week 2: Background estimation
 - Week 3: Foreground estimation
-- Week 4: Video stabilization (not done yet!)
+- Week 4: Video stabilization
 - Week 5: Region tracking (not done yet!)
 
 ## Common Files and Metrics
