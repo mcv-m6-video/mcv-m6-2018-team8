@@ -7,8 +7,8 @@ Configuration File:
 
 # ---------------- PARAMETERS ---------------- #
 # Change the DATABASE depending on the dataset you want to use
-# DATABASE = "kitti"
-DATABASE = "highway"
+DATABASE = "kitti"
+# DATABASE = "highway"
 # DATABASE = "fall"
 # DATABASE = "traffic"
 
@@ -29,10 +29,10 @@ MORPH_STRUCTURE = cv2.MORPH_RECT
 
 if DATABASE == "kitti":
     start_frame = 0
-    end_frame = -1
+    end_frame = -1 # all frames
     abs_dir_result = os.path.join(dir_databases, DATABASE, dir_results)
     abs_dir_gt = os.path.join(dir_databases, DATABASE, "flow_noc")
-    abs_dir_input = os.path.join(dir_databases, DATABASE, dir_results)
+    abs_dir_input = os.path.join(dir_databases, DATABASE, "colored_0")
 
 elif DATABASE == "highway":
     start_frame = 1050
