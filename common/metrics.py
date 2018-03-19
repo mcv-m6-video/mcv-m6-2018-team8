@@ -45,22 +45,21 @@ MeanSquareError and Percentage of Erroneous Pixels in Non-Occluded Areas
 """
 def MSEN_PEPN(y_gt, y_pred, of_from_dataset=False, show_error=False, th=3):
 
-    padd_y, padd_x = np.array(y_gt.shape[0:2]) - np.array(y_pred.shape[0:2])
+    padd_y, padd_x = np.array(y_gt.shape[:2]) - np.array(y_pred.shape[:2])
+
+    flow_pred_image = np.zeros((y_gt.shape))
 
     if padd_x or padd_y:
-        y_pred_padd = np.zeros((y_gt.shape))
-        y_pred_padd[padd_y:, padd_x:,:-1] = y_pred
-
-        flow_pred_image = y_pred_padd.copy()
-
-    assert (y_gt.shape[0:2] == flow_pred_image.shape[0:2])
+        flow_pred_image[padd_y//2:-padd_y//2, padd_x//2:-padd_x//2,:2] = y_pred
 
     flow_u_gt , flow_v_gt, valid_gt, flow_gt_image = ReadOpticalFlow(y_gt)
 
     if of_from_dataset:
         flow_u_pred, flow_v_pred, valid_pred, flow_pred_image = ReadOpticalFlow(y_pred)
+        assert (y_gt.shape[0:2] == flow_pred_image.shape)
     else:
         flow_u_pred, flow_v_pred = flow_pred_image[:,:,0], flow_pred_image[:,:,1] # vx, vy
+        assert (y_gt.shape[0:2] == flow_pred_image.shape[:2])
 
     # Errors (mean-square error)
     E_u = np.float_power((flow_u_gt - flow_u_pred), 2)
@@ -69,18 +68,17 @@ def MSEN_PEPN(y_gt, y_pred, of_from_dataset=False, show_error=False, th=3):
     E[valid_gt==0] = 0
     error_mse = E[valid_gt==1]
 
+    pepn_error = len(E[E > th]) / len(E[valid_gt])
+
     if show_error:
         plt.figure()
         plt.imshow(np.reshape(E, y_gt.shape[:-1]), cmap='viridis')
         plt.colorbar(orientation='horizontal')
-        plt.show()
 
-    pepn_error = len(E[E>th]) / len(E[valid_gt])
+        plotHistogram(error_mse, pepn_error, "Optical Flow")
 
     print("Error MSEN {}%".format(np.mean(error_mse)))
     print("Error PEPN {:4f}%".format(pepn_error * 100))
-
-    plotHistogram(error_mse, pepn_error, "Optical Flow")
 
     return flow_gt_image, flow_pred_image, error_mse, pepn_error
 

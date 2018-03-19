@@ -49,19 +49,20 @@ def BlockMatchingOpticalFlow(im1, im2, window_size=15, shift=3, stride=1, motion
     half_window_size = window_size // 2
 
     # Go through all the blocks.
-
     tx, ty = 0, 0
     for row in range(half_window_size, im2.shape[0] - half_window_size - 1, stride):
         for col in range(half_window_size, im2.shape[1] - half_window_size - 1, stride):
             window_next_frame = im_ref[row - half_window_size:row + half_window_size + 1, col - half_window_size:col + half_window_size + 1]
 
             if im_show_debug:
-                im_test_1 = im1.copy()
-                im_test_2 = im2.copy()
+                im_test_ref = im_ref.copy()
+                # im_test_study = im_study.copy()
 
-                cv2.rectangle(im_test_2, (row - half_window_size, col - half_window_size),
-                              (row + half_window_size + 1, col + half_window_size + 1), (255, 0, 0), thickness=1)
-                cv2.imshow("Image Ref", im_test_2)
+                cv2.putText(im_test_ref, "({},{})".format(col,row), (col, row),
+                            cv2.FONT_HERSHEY_SIMPLEX, fontScale=0.5, color=(0, 0, 255))
+                cv2.rectangle(im_test_ref, (col - half_window_size, row - half_window_size),
+                              (col + half_window_size, row + half_window_size), (255, 0, 0), thickness=1)
+                cv2.imshow("Image Ref", im_test_ref)
 
             min_dist = None
             flowx, flowy = 0, 0
@@ -72,8 +73,13 @@ def BlockMatchingOpticalFlow(im1, im2, window_size=15, shift=3, stride=1, motion
                     window_previous_frame = im_study[r - half_window_size:r + half_window_size + 1, c - half_window_size:c + half_window_size + 1]
 
                     if im_show_debug:
-                        cv2.rectangle(im_test_1, (r - half_window_size, c - half_window_size), (r + half_window_size + 1, c + half_window_size + 1), (0, 255, 0), thickness=1)
-                        cv2.imshow("Image Study", im_test_1)
+                        im_test_study = im_study.copy()
+
+                        cv2.rectangle(im_test_study, (c - half_window_size, r - half_window_size),
+                                      (c + half_window_size, r + half_window_size), (0, 255, 0), thickness=1)
+                        cv2.rectangle(im_test_study, (col - half_window_size, row - half_window_size),
+                                      (col + half_window_size, row + half_window_size), (255, 0, 0), thickness=1)
+                        cv2.imshow("Image Study", im_test_study)
                         cv2.waitKey(1)
 
                     # Compute the distance and update minimum.
