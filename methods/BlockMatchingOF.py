@@ -19,7 +19,7 @@ def SSD(vector_a, vector_b):
 # Output: The x- and y-velocities (both numpy arrays).
 #
 """
-Comute the Block Matching Optical FLow algorithm using two consecutives frames from the Dataset 
+Comute the Block Matching Optical FLow algorithm using two consecutives frames from the Dataset
 Return: X-Y directions
 """
 def BlockMatchingOpticalFlow(im1, im2, window_size=15, shift=3, stride=1, motion_estimation="forward", im_show_debug=False):
@@ -110,55 +110,3 @@ def quiver_flow_field(vx, vy):
     plt.figure()
     plt.quiver(vx, vy, color='r')
     plt.show(1)
-
-
-
-def BlockMatching(im_1, im_2, block_size, search_area, motion_estimation):
-
-    if motion_estimation == 'backward':
-    # All pixels in the current image are associated to a pixel in the past image (but the contrary cannot be ensured).
-        im_ref = im_1 # past image
-        im_study = im_2 # current image
-    elif motion_estimation == 'forward':
-    # All pixels in the past image are associated to a pixel in the current image (but the contrary cannot be ensured).
-        im_study = im_1 # past image
-        im_ref = im_2 # current image
-    else:
-        print("The name of the motion estimation is wrong")
-
-    num_blocks_x = im_study.shape[0]/block_size # W - WS / step
-    num_blocks_y = im_study.shape[1]/block_size
-
-    motion_directions = np.zeros([num_blocks_x, num_blocks_y, 2])
-
-    im_ref_padded = np.zeros([im_ref.shape[0]+2*search_area,im_ref.shape[1]+2*search_area])
-    im_ref_padded[search_area:search_area+im_ref.shape[0],search_area:search_area+im_ref.shape[1]] = im_ref[:,:]
-
-    # quantization_step = 1 # 1/4
-
-    for i in range(num_blocks_x):
-        for j in range(num_blocks_y):
-            blockstudied = im_study[(i*block_size):((i*block_size)+block_size), (j*block_size):((j*block_size)+block_size)]
-            blockcompared = im_ref_padded[(i*block_size):((i*block_size)+(2*search_area)+block_size), (j*block_size):((j*block_size)+(2*search_area)+block_size)]
-
-            size_block_x = blockcompared.shape[0]
-            size_block_y = blockcompared.shape[1]
-
-            # Initialize minimum distance
-            min_d = 1000000000
-            for k in range(size_block_x-search_area):
-                for w in range(size_block_y-search_area):
-                    blockcompared2 = blockcompared[k:k+block_size,w:w+block_size]
-                    # the algorithm searches the block of the reference image with minimum Euclidean distance(maximum correlation)
-                    ssd = sum(sum(abs(blockcompared2-blockstudied)**2))
-
-                    if ssd < min_d:
-                        min_d = ssd
-                        vx = -k + search_area
-                        vy = w - search_area
-
-
-            motion_directions[i,j,0] = vx
-            motion_directions[i,j,1] = vy
-
-    return motion_directions
