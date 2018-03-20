@@ -25,6 +25,10 @@ MORPH_STRUCTURE = cv2.MORPH_RECT
 # MORPH_STRUCTURE = cv2.MORPH_CROSS
 # MORPH_STRUCTURE = cv2.MORPH_ELLIPSE
 
+OF_TYPE = "LucasKanade"
+# OF_TYPE = "Farneback"
+OF_TYPE = "BlockMatching"
+
 # -------------------------------------------- #
 
 if DATABASE == "kitti":

@@ -51,6 +51,8 @@ def MSEN_PEPN(y_gt, y_pred, of_from_dataset=False, show_error=False, th=3):
 
     if padd_x or padd_y:
         flow_pred_image[padd_y//2:-padd_y//2, padd_x//2:-padd_x//2,:2] = y_pred
+    else:
+        flow_pred_image[... ,:2] = y_pred
 
     flow_u_gt , flow_v_gt, valid_gt, flow_gt_image = ReadOpticalFlow(y_gt)
 
@@ -77,8 +79,8 @@ def MSEN_PEPN(y_gt, y_pred, of_from_dataset=False, show_error=False, th=3):
 
         plotHistogram(error_mse, pepn_error, "Optical Flow")
 
-    print("Error MSEN {}%".format(np.mean(error_mse)))
-    print("Error PEPN {:4f}%".format(pepn_error * 100))
+    print("Error MSEN {:.4f}%".format(np.mean(error_mse)))
+    print("Error PEPN {:.4f}%".format(pepn_error * 100))
 
     return flow_gt_image, flow_pred_image, error_mse, pepn_error
 
@@ -209,13 +211,13 @@ def getAUC(a,b, reorder=False):
     return np.trapz(a, b)
     # return auc(a, b, reorder=reorder)
 
-def plot2D(x_axis, y_axis, x_label='', y_label=''):
+def plot2D(x_axis, y_axis, x_label='', y_label='', legend_label=DATABASE):
     plt.figure()
-    plt.plot(x_axis, y_axis, 'b', label=DATABASE)
+    plt.plot(x_axis, y_axis, 'b', label=legend_label)
     plt.legend(loc="lower right")
     plt.xlabel(x_label)
     plt.ylabel(y_label)
-    plt.ylim([0, 1])
+    # plt.ylim([0, 1])
     plt.savefig("plot2d_{}.png".format(datetime.now().strftime('%d%m%y_%H-%M-%S')), bbox_inches='tight', frameon=False)
     plt.show()
 
