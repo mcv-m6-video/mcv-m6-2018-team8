@@ -10,9 +10,7 @@ We have created the python file `BlockMatchingOF()` in order to estimate the Opt
 
 ### Task 2
 
-To stabilize the sequence of frames of Traffic dataset, we have created the function `CompensateImage()`.We used other functions 
-
-
+To stabilize the sequence of frames of Traffic dataset, we have created the function `CompensateImage()`.We have implemented Morphological Transformations. We have imported some functions from OpenCV, `cv2.erode()`, `cv2.dilate()` and `cv2.morphologyEx()`.
 
 ## Execution usage
 ### Optical Flow (Task 1)
