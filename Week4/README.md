@@ -10,7 +10,7 @@ We have created the python file `BlockMatchingOF()` in order to estimate the Opt
 
 ### Task 2
 
-To stabilize the sequence of frames of Traffic dataset, we have created the function `CompensateImage()`.
+To stabilize the sequence of frames of Traffic dataset, we have created the function `CompensateImage()`.We used other functions 
 
 
 
