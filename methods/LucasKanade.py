@@ -5,8 +5,19 @@ def lucas_kanade_np(prvs, next, win=2):
 
     assert prvs.shape == next.shape
 
-    im1 = cv2.cvtColor(prvs, cv2.COLOR_BGR2GRAY)
-    im2 = cv2.cvtColor(next, cv2.COLOR_BGR2GRAY)
+    im1 = np.zeros(prvs.shape[:2], dtype=np.uint8)
+
+    if prvs.ndim == 3:
+        im1 = cv2.cvtColor(prvs, cv2.COLOR_BGR2GRAY)
+    else:
+        im1[...] = prvs
+
+    im2 = np.zeros(next.shape[:2], dtype=np.uint8)
+
+    if next.ndim == 3:
+        im2 = cv2.cvtColor(next, cv2.COLOR_BGR2GRAY)
+    else:
+        im2[...] = next
 
     I_x = np.zeros(im1.shape)
     I_y = np.zeros(im1.shape)
