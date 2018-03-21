@@ -27,4 +27,4 @@ Execute the `task2.py` to stabilize the video.
 $ python task2.py
 ```
 
-For Task 2.3, the scripts `task2_3_ownmethod.py` and `task2_3_LK_stabilization.py` should be run to obtain the stabilization of our own video with our method and an other implementation from the optimize Jaime’s implementation in the StackOverflow (view this [link](https://stackoverflow.com/questions/14321092/lucas-kanade-python-numpy-implementation-uses-enormous-amount-of-memory)_
+For Task 2.3, the scripts `task2_3_ownmethod.py` and `task2_3_LK_stabilization.py` should be run to obtain the stabilization of our own video with our method and an other implementation from the optimize Jaime’s implementation in the StackOverflow (view this [link](https://stackoverflow.com/questions/14321092/lucas-kanade-python-numpy-implementation-uses-enormous-amount-of-memory))
