@@ -5,42 +5,26 @@ This Week's README help us to prepare the environment in order to be able to cod
 ## Description by Tasks
 
 ### Task 1
-We have created the python file 
+We have created the python file `BlockMatchingOF()` in order to estimate the Optical Flow. We have compared the results of both sequences of Kitti with other two methods which are Lucas-Kanade and Farneback. 
 
 
 ### Task 2
 
+To stabilize the sequence of frames of Traffic dataset, we have created the function `CompensateImage()`.
 
-### Task 3
-
-### Task 4
 
 
 ## Execution usage
-### (Task 1)
-Execute the `task1.py` to execute 
-
+### Optical Flow (Task 1)
+Execute the `task1.py` to execute the Optical Flow with our Block Matching method.
 ```sh
 $ python task1.py
 ```
 
-### (Task 2)
-Execute the `task2.py` to execute 
+### Video Stabilization (Task 2)
+Execute the `task2.py` to stabilize the video.
 ```sh
 $ python task2.py
 ```
 
-### (Task 3)
-Execute the `task3.py` to execute 
-
-```sh
-$ python task3.py
-```
-
-### (Task 4)
-Execute the `task4.py` to execute 
-
-```sh
-$ python task4.py
-```
-
+For Task 2.3, the scripts `task2_3_ownmethod.py` and `task2_3_LK_stabilization.py` should be run to obtain the stabilization of our own video with our method and an other implementation from the optimize Jaime’s implementation in the StackOverflow (view this [link](https://stackoverflow.com/questions/14321092/lucas-kanade-python-numpy-implementation-uses-enormous-amount-of-memory))
