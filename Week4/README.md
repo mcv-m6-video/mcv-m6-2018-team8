@@ -15,7 +15,7 @@ To stabilize the sequence of frames of Traffic dataset, we have created the func
 
 
 ## Execution usage
-### (Task 1)
+## (Task 1)
 Execute the `task1.py` to execute the Optical Flow with our Block Matching method.
 ```sh
 $ python task1.py
