@@ -54,4 +54,4 @@ The database availables are:
 - Highway (Changedetection)
 - Fall
 - Traffic
-- Kitty (for the Optical Flow apporach)
+- Kitty (for the Optical Flow approach)
