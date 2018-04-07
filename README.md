@@ -17,7 +17,7 @@ Team 8:
 - Week 2: Background estimation
 - Week 3: Foreground estimation
 - Week 4: Video stabilization
-- Week 5: Region tracking (not done yet!)
+- Week 5: Region tracking
 
 ## Common Files and Metrics
 
@@ -51,7 +51,7 @@ The configuration file is located in `common/config.py`. This file will be upgra
 All the database are located in the `databases/`. Choose which want to use in the `config.py` file by selection the desired `DATABASE` global variable (view in the file)
 
 The database availables are:
-- Changedetection (Highway)
+- Highway (Changedetection)
 - Fall
 - Traffic
-- Kitty (for the Optical Flow apporach)
+- Kitty (for the Optical Flow approach)
