@@ -27,20 +27,43 @@ if __name__ == "__main__":
     gt = gt_db.loadDB(im_color=cv2.IMREAD_UNCHANGED | cv2.IMREAD_ANYDEPTH)
     input = input_db.loadDB(im_color=True)
 
-    # array_rho = np.array([0.22])  # 0.11 for traffic
-    # array_alpha = np.linspace(0, 5, 10, endpoint=True)
-    #
-    # gt_test = []
-    # if GAUSSIAN_METHOD in 'adaptative':
-    #     matrix_mean, matrix_std, gt_test = OneSingleGaussianAdapt(input, alpha_params=array_alpha,
-    #                                                               rho_params=array_rho,
-    #                                                               im_show=False) if not checkFilesNPY("numpy_files") else checkFilesNPY("numpy_files")
-    # else:
-    #     matrix_mean, matrix_std, gt_test = OneSingleGaussian(input, array_alpha, im_show=False)
+    dir_to_save_fig = "output_images"
+    dir_to_save_npy = "output_npy"
+    if not os.path.exists(dir_to_save_fig):
+        os.mkdir(dir_to_save_fig)
 
+    if not os.path.exists(dir_to_save_npy):
+        os.mkdir(dir_to_save_npy)
 
-    # gt_test = np.load("gt_test_highway.npy")
-    # gt_test = np.where(gt_test==True,255,0)
+    """
+    AdaptativeGaussian Computation (no compensation)
+    Extract the Foreground Image
+    """
+
+    # Highway
+    array_alpha = np.array([3.8])
+    array_rho = np.array([0.22])
+
+    # array_rho = np.array([0.22]) #Fall
+    # array_rho = np.array([0.11])  # Traffic
+
+    if not os.path.exists(os.path.join(dir_to_save_npy, "gt_test_{}.npy".format(GAUSSIAN_METHOD))):
+
+        if GAUSSIAN_METHOD in 'adaptative':
+            matrix_mean, matrix_std, gt_test = OneSingleGaussianAdapt(input, alpha_params=array_alpha,
+                                                                      rho_params=array_rho,
+                                                                      num_of_train_images=len(input) // 2,
+                                                                      im_show=False)
+        else:
+            matrix_mean, matrix_std, gt_test = OneSingleGaussian(input, array_alpha, im_show=False)
+
+        np.save(os.path.join(dir_to_save_npy, "gt_test_{}".format(GAUSSIAN_METHOD)), gt_test)
+
+    else:
+        gt_test = np.load(os.path.join(dir_to_save_npy, "gt_test_{}.npy".format(GAUSSIAN_METHOD)))
+
+    if use_morph_ex:
+        kernel = cv2.getStructuringElement(MORPH_STRUCTURE, (3, 3))
+        gt_test = MorphologicalTransformation(gt_test[0, 0], kernel=kernel, type=MORPH_EX)
 
     Tracking_KF(gt)
-    # filtered_state_means, filtered_state_covariances = Tracking_KF(gt)

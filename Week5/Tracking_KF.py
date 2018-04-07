@@ -41,7 +41,7 @@ def Tracking_KF(gt):
     # kalman.errorCovPost = 1. * np.ones((2, 2))
     # kalman.statePost = 0.1 * np.random.randn(2, 1)
 
-    palette = sns.color_palette(None, 20).as_hex()
+    palette = sns.color_palette(None, 100).as_hex() #TODO assuming a max of 100 cars
 
     kalmanFilters = {}
     valid_regions = {}
@@ -54,9 +54,11 @@ def Tracking_KF(gt):
         sys.stdout.write("\r  {}/{}".format(num_frame, len(gt)))
         sys.stdout.flush()
 
-        imgray = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
-        thresh, image = cv2.threshold(imgray,170,255,0)
-        connected_region = label(image, background=0)
+        if len(im.shape) > 2:
+            im = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
+            thresh, im = cv2.threshold(im,170,255,0)
+
+        connected_region = label(im, background=0)
 
         # image_color = cv2.cvtColor(imgray, cv2.COLOR_GRAY2BGR)
         image_color = cv2.cvtColor(cv2.convertScaleAbs(connected_region, alpha=255.0 / np.max(connected_region)), cv2.COLOR_GRAY2BGR)
@@ -70,7 +72,7 @@ def Tracking_KF(gt):
 
             # id = new_id + region_id
             id = region_id + offset_id - error_id
-            if region.area >= 100:
+            if region.area >= 200:
                 # bbox (min_row, min_col, max_row, max_col)
                 minr, minc, maxr, maxc = region.bbox
 
