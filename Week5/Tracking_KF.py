@@ -21,6 +21,10 @@ class KF_Class:
     def Predict(self):
         return self.objKF.predict()
 
+def SpeedDetector(d):
+    kilometer_per_pixel = 80
+    return np.round(np.abs(np.log(d)+kilometer_per_pixel), 1)
+
 def HexToBGR(hex):
     if "#" in hex:
         hex = hex.lstrip('#')
@@ -47,7 +51,6 @@ def Tracking_KF(gt):
     valid_regions = {}
     pts_predicted = {}
 
-    start_id = 1
     offset_id = 0
     for num_frame, im in enumerate(gt):
 
@@ -70,6 +73,7 @@ def Tracking_KF(gt):
             car_still_alive = False
             enough_objects = True
 
+            speed = -1
             # id = new_id + region_id
             id = region_id + offset_id - error_id
             if region.area >= 200:
@@ -87,6 +91,9 @@ def Tracking_KF(gt):
                     #     if i in valid_regions:
                     distance = np.sqrt(np.power(valid_regions[id].centroid[0] - region.centroid[0], 2)
                                        + np.power(valid_regions[id].centroid[1] - region.centroid[1], 4))
+
+                    speed = SpeedDetector(distance)
+
                     if distance < 50:
                         car_still_alive = True
                 else:
@@ -135,7 +142,9 @@ def Tracking_KF(gt):
                 cv2.imshow("Current Point", im_test)
                 cv2.waitKey(1)
 
-                cv2.putText(image_color, "Car {}".format(id), (minc, minr), cv2.FONT_HERSHEY_SIMPLEX,
+                speed = speed if speed != -1 else np.nan
+
+                cv2.putText(image_color, "Car {} {:.2f}".format(id, speed), (minc, minr), cv2.FONT_HERSHEY_SIMPLEX,
                             fontScale=0.5, color=HexToBGR(palette[id]))
 
                 cv2.circle(image_color, (np.int32(region.centroid[1]), np.int32(region.centroid[0])), 3, (0, 0, 255), -1)

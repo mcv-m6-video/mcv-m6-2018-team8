@@ -2,6 +2,7 @@ from common.config import *
 from common.Database import *
 from methods.GaussianMethods import *
 from Week3.MorphologicTransformation import *
+from Week3.Holefilling import *
 sys.path.append('../')
 
 from Tracking_KF import *
@@ -66,4 +67,6 @@ if __name__ == "__main__":
         kernel = cv2.getStructuringElement(MORPH_STRUCTURE, (3, 3))
         gt_test = MorphologicalTransformation(gt_test[0, 0], kernel=kernel, type=MORPH_EX)
 
-    Tracking_KF(gt)
+    gt_test = Holefilling(gt_test, 4)
+
+    Tracking_KF(gt_test)
