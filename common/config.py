@@ -7,27 +7,29 @@ Configuration File:
 
 # ---------------- PARAMETERS ---------------- #
 # Change the DATABASE depending on the dataset you want to use
-DATABASE = "kitti"
-# DATABASE = "highway"
-# DATABASE = "fall"
-# DATABASE = "traffic"
+# DATABASE              = "kitti"
+DATABASE                = "highway"
+# DATABASE              = "fall"
+# DATABASE              = "traffic"
 
-dir_databases = "../databases"
-dir_results = 'results'
-dir_input = 'input'
-dir_gt = 'groundtruth'
+dir_databases           = "../databases"
+dir_results             = "results"
+dir_input               = "input"
+dir_gt                  = "groundtruth"
 
-GAUSSIAN_METHOD = 'adaptative'
-MORPH_EX = 'opening'
+GAUSSIAN_METHOD         = "adaptative"
+MORPH_EX                = "opening"
 
 # choose the desire strucutre for the morphological operation (cv2 type)
-MORPH_STRUCTURE = cv2.MORPH_RECT
-# MORPH_STRUCTURE = cv2.MORPH_CROSS
-# MORPH_STRUCTURE = cv2.MORPH_ELLIPSE
+use_morph_ex            = True
+MORPH_STRUCTURE         = cv2.MORPH_RECT
+# MORPH_STRUCTURE       = cv2.MORPH_CROSS
+# MORPH_STRUCTURE       = cv2.MORPH_ELLIPSE
 
-OF_TYPE = "LucasKanade"
-# OF_TYPE = "Farneback"
-OF_TYPE = "BlockMatching"
+# Optical Flow method
+OF_TYPE                 = "LucasKanade"
+# OF_TYPE               = "Farneback"
+# OF_TYPE               = "BlockMatching"
 
 # -------------------------------------------- #
 
