@@ -162,7 +162,7 @@ def MakeYourGIF(input, path_to_save='video.gif'):
     if isinstance(input, (list,)):
         input = np.array(input)
 
-    assert(input.ndim <= 3)
+    assert(input.ndim <= 4)
 
     input = checkImageForVisualise(input)
 
@@ -171,8 +171,8 @@ def MakeYourGIF(input, path_to_save='video.gif'):
 
         for i, file in enumerate(input):
             file = cv2.convertScaleAbs(file, alpha=np.iinfo(file.dtype).max / np.amax(file))
-            cv2.imshow("", file)
-            cv2.waitKey(1)
+            # cv2.imshow("GIF", file)
+            # cv2.waitKey(1)
 
             writer.append_data(file)
 
