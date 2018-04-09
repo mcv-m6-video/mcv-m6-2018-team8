@@ -1,11 +1,13 @@
 from common.config import *
 from common.Database import *
+from common.extractPerformance import *
 from methods.GaussianMethods import *
 from Week3.MorphologicTransformation import *
 from Week3.Holefilling import *
 sys.path.append('../')
 
 from Tracking_KF import *
+from CamShift import *
 
 def checkFilesNPY(dir="."):
     if not os.path.isfile(os.path.join(dir,"gt_test_{}.npy".format(DATABASE))):
@@ -69,4 +71,8 @@ if __name__ == "__main__":
 
     gt_test = Holefilling(gt_test, 4)
 
-    Tracking_KF(gt_test)
+    track_gt = Tracking_KF(gt)
+    # CamShift(gt)
+    # MakeYourGIF(track_gt, "tacking_gt_{}.gif".format(DATABASE))
+
+

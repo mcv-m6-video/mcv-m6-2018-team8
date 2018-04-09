@@ -32,7 +32,7 @@ def HexToBGR(hex):
     return tuple(int(hex[i:i + 2], 16) for i in (4, 2, 0))
 
 
-def Tracking_KF(gt):
+def Tracking_KF(gt, debug=False):
 
     # init kalman filter object
 
@@ -44,6 +44,8 @@ def Tracking_KF(gt):
     # kalman.measurementNoiseCov = 1e-1 * np.ones((1, 1))
     # kalman.errorCovPost = 1. * np.ones((2, 2))
     # kalman.statePost = 0.1 * np.random.randn(2, 1)
+
+    output_images = []
 
     palette = sns.color_palette(None, 100).as_hex() #TODO assuming a max of 100 cars
 
@@ -104,12 +106,13 @@ def Tracking_KF(gt):
                 # calculate distance between old region=>valid_regions[id] and current region=>region
                 # one car lefts or new one car appear
                 if not car_still_alive and enough_objects:
-                    im_2 = im.copy()
-                    cv2.circle(im_2,
-                               (np.int32(region.centroid[1]), np.int32(region.centroid[0])),
-                               2, (0, 0, 0), -1)
-                    cv2.imshow("Next Frame", im_2)
-                    cv2.waitKey(1)
+                    if debug:
+                        im_2 = im.copy()
+                        cv2.circle(im_2,
+                                   (np.int32(region.centroid[1]), np.int32(region.centroid[0])),
+                                   2, (0, 0, 0), -1)
+                        cv2.imshow("Next Frame", im_2)
+                        cv2.waitKey(1)
 
                     if id == (offset_id + 1):
                         offset_id += 1
@@ -139,9 +142,6 @@ def Tracking_KF(gt):
                            (np.int32(pts_predicted[id][-1][1]), np.int32(pts_predicted[id][-1][0])),
                            2, HexToBGR(palette[id]), -1)
 
-                cv2.imshow("Current Point", im_test)
-                cv2.waitKey(1)
-
                 speed = speed if speed != -1 else np.nan
 
                 cv2.putText(image_color, "Car {} {:.2f}".format(id, speed), (minc, minr), cv2.FONT_HERSHEY_SIMPLEX,
@@ -156,8 +156,9 @@ def Tracking_KF(gt):
 
                 cv2.circle(im_test, (np.int32(region.centroid[1]), np.int32(region.centroid[0])), 2, (0, 0, 255), -1)
 
-                cv2.imshow("Current Point", im_test)
-                cv2.waitKey(1)
+                if debug:
+                    cv2.imshow("Current Point", im_test)
+                    cv2.waitKey(1)
 
             else:
                 error_id+=1
@@ -165,4 +166,6 @@ def Tracking_KF(gt):
         cv2.imshow("Kalman Filter", image_color)
         cv2.waitKey(1)
 
-    return True
+        output_images.append(image_color)
+
+    return np.array(output_images)
