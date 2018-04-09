@@ -6,8 +6,8 @@ from Week3.MorphologicTransformation import *
 from Week3.Holefilling import *
 sys.path.append('../')
 
-from Tracking_KF import *
-from CamShift import *
+from Tracking_KalmanFilter import *
+from Tracking_CamShift import *
 
 def checkFilesNPY(dir="."):
     if not os.path.isfile(os.path.join(dir,"gt_test_{}.npy".format(DATABASE))):
@@ -47,10 +47,15 @@ if __name__ == "__main__":
     array_alpha = np.array([3.8])
     array_rho = np.array([0.22])
 
-    # array_rho = np.array([0.22]) #Fall
-    # array_rho = np.array([0.11])  # Traffic
+    # Fall
+    # array_alpha = np.array([5.0])
+    # array_rho = np.array([0.22])
 
-    if not os.path.exists(os.path.join(dir_to_save_npy, "gt_test_{}.npy".format(GAUSSIAN_METHOD))):
+    # Traffic
+    # array_alpha = np.array([5.0])
+    # array_rho = np.array([0.11])
+
+    if not os.path.exists(os.path.join(dir_to_save_npy, "gt_test_{}_{}.npy".format(GAUSSIAN_METHOD,DATABASE))):
 
         if GAUSSIAN_METHOD in 'adaptative':
             matrix_mean, matrix_std, gt_test = OneSingleGaussianAdapt(input, alpha_params=array_alpha,
@@ -60,10 +65,10 @@ if __name__ == "__main__":
         else:
             matrix_mean, matrix_std, gt_test = OneSingleGaussian(input, array_alpha, im_show=False)
 
-        np.save(os.path.join(dir_to_save_npy, "gt_test_{}".format(GAUSSIAN_METHOD)), gt_test)
+        np.save(os.path.join(dir_to_save_npy, "gt_test_{}_{}".format(GAUSSIAN_METHOD,DATABASE)), gt_test)
 
     else:
-        gt_test = np.load(os.path.join(dir_to_save_npy, "gt_test_{}.npy".format(GAUSSIAN_METHOD)))
+        gt_test = np.load(os.path.join(dir_to_save_npy, "gt_test_{}_{}.npy".format(GAUSSIAN_METHOD,DATABASE)))
 
     if use_morph_ex:
         kernel = cv2.getStructuringElement(MORPH_STRUCTURE, (3, 3))
@@ -71,8 +76,12 @@ if __name__ == "__main__":
 
     gt_test = Holefilling(gt_test, 4)
 
-    track_gt = Tracking_KF(gt)
-    # CamShift(gt)
-    # MakeYourGIF(track_gt, "tacking_gt_{}.gif".format(DATABASE))
+
+    # data = gt
+    data = gt_test
+
+    track_gt = Tracking_KalmanFilter(input[-len(data):], data, debug=True)
+    track_gt = Tracking_CamShift(input[-len(data):], data, debug=True)
+    # MakeYourGIF(track_gt, "camshift_tacking_gt_{}.gif".format(DATABASE))
 
 
