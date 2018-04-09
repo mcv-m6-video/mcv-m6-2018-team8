@@ -12,8 +12,8 @@ def MorphologicalTransformation(input, kernel, type):
     if isinstance(input, (list,)):
         input = np.array(input)
 
-    if input.dtype == 'bool':
-        input = input.astype(np.uint8)
+    if input.dtype != np.uint8:
+        input = np.uint8(input)
 
     list_transf = []
     for i, img in enumerate(input):
