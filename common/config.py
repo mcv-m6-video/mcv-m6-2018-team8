@@ -8,9 +8,9 @@ Configuration File:
 # ---------------- PARAMETERS ---------------- #
 # Change the DATABASE depending on the dataset you want to use
 # DATABASE              = "kitti"
-# DATABASE                = "highway"
+DATABASE                = "highway"
 # DATABASE              = "fall"
-DATABASE              = "traffic"
+# DATABASE              = "traffic"
 
 dir_databases           = "../databases"
 dir_results             = "results"
