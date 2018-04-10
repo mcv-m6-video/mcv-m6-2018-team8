@@ -94,7 +94,7 @@ def Tracking_KalmanFilter(input, gt, debug=False):
                         cv2.circle(im_test, (np.int32(region.centroid[1]), np.int32(region.centroid[0])), 2,
                                    (0, 0, 255), -1)
                         cv2.imshow("Current Point", im_test)
-                        cv2.waitKey(100)
+                        cv2.waitKey(50)
 
                     # for i in range(max(1, id-1), id+2):
                     #     if i in valid_regions:

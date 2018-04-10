@@ -124,7 +124,7 @@ def Tracking_CamShift(input, gt, debug=False):
                             cv2.polylines(im_test, np.array([pts_predicted[id][-4:]], dtype=np.int32), True,
                                           HexToBGR(palette[id]), thickness=1)
                         cv2.imshow("Current Point", im_test)
-                        cv2.waitKey(100)
+                        cv2.waitKey(50)
 
                     # for i in range(max(1, id-1), id+2):
                     #     if i in valid_regions:
@@ -199,7 +199,7 @@ def Tracking_CamShift(input, gt, debug=False):
             else:
                 error_id += 1
 
-        cv2.imshow("Kalman Filter", image_color)
+        cv2.imshow("CamShift", image_color)
         cv2.imshow("Mask", mask)
         cv2.waitKey(1)
 
