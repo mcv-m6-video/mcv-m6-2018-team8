@@ -13,7 +13,7 @@ Team 8:
 
 ## Project Schedule
 
-- Week 1: [Introduction to video sequence analysis and evaluation](tree/master/Week1)
+- Week 1: [Introduction to video sequence analysis and evaluation](../../tree/master/Week1)
 - Week 2: [Background estimation]
 - Week 3: [Foreground estimation]
 - Week 4: [Video stabilization]
