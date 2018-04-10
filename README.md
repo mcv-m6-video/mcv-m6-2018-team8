@@ -13,26 +13,31 @@ Team 8:
 
 ## Project Schedule
 
-- Week 1: Introduction to video sequence analysis and evaluation
-- Week 2: Background estimation
-- Week 3: Foreground estimation
-- Week 4: Video stabilization
-- Week 5: Region tracking
+- Week 1: [Introduction to video sequence analysis and evaluation](tree/master/Week1)
+- Week 2: [Background estimation]
+- Week 3: [Foreground estimation]
+- Week 4: [Video stabilization]
+- Week 5: [Region tracking]
 
 ## Common Files and Metrics
 
 ### Peformance
 
-For each Task, we calculate the True Postive, False Positive, True Negative and False Negative values for each case.
+Located in `common/extractPerformance.py`.
+Calculate the True Postive, False Positive, True Negative and False Negative values for each case.
 
-The Performance has two methods, depending on the number of bnarried parameters you want:
+The Performance has two methods, depending on the number of the sweep parameters you want:
 
 - None or 1 sweep parameter: `extractPerformance()`
 - Two sweep parameters: `extractPerformance_2Params()`
+- Make Your GIF: `MakeYourGIF()`
+- Show different sets of images: `compareImages()`
+- Helper functions for visualise: `checkImageForVisualise()`
 
 ### Metrics
 
-For each Task, we also calculate the precision, recall and f1-score in order to obtain the requested metrics.
+Located in `common/metrics.py`.
+Include all the functions to to calculate the precision, recall and f1-score in order to obtain the requested metrics.
 
 Methods for metrics:
 - None or 1 sweep parameter: `metrics()`
@@ -42,9 +47,30 @@ Methods for metrics:
 - Plot F1-Score (2D): `plotF1Score2D()`
 - Plot F1-Score (3D): `plotF1Score3D()`
 
+For Optical Flow:
+- Mean Square Error and Percentage of Erroneous Pixels in Non-Occluded Areas: `MSEN_PEPN()`
+- Read Optical Flow images: `ReadOpticalFlow()`
+- Show Optical Flow images: `ShowOpticalFlow()`
+- Plot Histogram for MSE: `plotHistogram()`
+
+Others (view description in `common/metrics.py`)
+- `findParams()`
+
 ## Configuration
 
 The configuration file is located in `common/config.py`. This file will be upgraded for the new features. You can specify which dataset you want to use, select the names of the root folder and their respective subfolders (Ground Truth and Input images) and other parameters.
+More info in `common/config.py`.
+
+### Methods
+
+Some methods are included in their respective Week folder, but other more general are lcoated in `common/methods`.
+You can find more information in each method:
+- `AreaFiltering.py`
+- `BlockMathingOF.py`
+- `Farneback.py`
+- `GaussianMethods.py`
+- `LucasKanade.py`
+- `ShadowRemoval.py`
 
 ## Database
 
