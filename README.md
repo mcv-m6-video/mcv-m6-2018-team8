@@ -13,7 +13,7 @@ Team 8:
 
 ## Project Schedule
 
-- Week 1: [Introduction to video sequence analysis and evaluation](mcv-m6-2018-team8/blob/master/Week1)
+- Week 1: [Introduction to video sequence analysis and evaluation](Week1)
 - Week 2: [Background estimation](mcv-m6-2018-team8/blob/master/Week2)
 - Week 3: [Foreground estimation](mcv-m6-2018-team8/blob/master/Week3)
 - Week 4: [Video stabilization](mcv-m6-2018-team8/blob/master/Week4)
