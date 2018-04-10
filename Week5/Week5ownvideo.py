@@ -42,10 +42,18 @@ if __name__ == "__main__":
     post_frame = cap.get(cv2.CAP_PROP_FRAME_COUNT)
     
     imagescomp = []
-
-    for i in range(0, 300):
+#Crop region
+    x1 = 400
+    y1 = 600
+    x2 = 1200
+    y2 = 1900
+#Number of frames
+    Nfr = 300
+    for i in range(0, Nfr):
         fr = cap.read()
-        imagescomp.append(fr[1])
+        frtocrop = fr[1]
+        crop_img = frtocrop[y1:y2, x1:x2]
+        imagescomp.append(crop_img)
     final_images = np.array(imagescomp)
     
     input = final_images
@@ -104,5 +112,8 @@ if __name__ == "__main__":
     track_gt = Tracking_KalmanFilter(input[-len(data):], data, debug=True)
     track_gt = Tracking_CamShift(input[-len(data):], data, debug=True)
     # MakeYourGIF(track_gt, "camshift_tacking_gt_{}.gif".format(DATABASE))
+
+
+
 
 
