@@ -31,7 +31,7 @@ Here it is time to compare the results respect to the baseline from the Week bef
 
 ## Execution usage
 ### Vehicle Tracker (Task 1)
-Execute the `Week5.py` to execute the `OneSingleGaussianAdapt()` from `GaussianMethods.py`, to apply Hole Filling from the function `Holefilling()` and Opening from `MorphologicalTransformation()` and finally `Tracking_KalmanFilter()` and `Tracking_CamShift()` for tracking vehicles with the respective method, Kalman Filter (## Task 1.1) and CamShift (## Task 1.2)
+Execute the `Week5.py` to execute the `OneSingleGaussianAdapt()` from `GaussianMethods.py`, to apply Hole Filling from the function `Holefilling()` and Opening from `MorphologicalTransformation()` and finally `Tracking_KalmanFilter()` and `Tracking_CamShift()` for tracking vehicles with the respective method, Kalman Filter (Task 1.1) and CamShift (Task 1.2)
 
 ```sh
 $ python Week5.py
