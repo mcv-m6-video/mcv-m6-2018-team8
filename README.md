@@ -56,21 +56,22 @@ For Optical Flow:
 Others (view description in `common/metrics.py`)
 - `findParams()`
 
-## Configuration
-
-The configuration file is located in `common/config.py`. This file will be upgraded for the new features. You can specify which dataset you want to use, select the names of the root folder and their respective subfolders (Ground Truth and Input images) and other parameters.
-More info in `common/config.py`.
-
 ### Methods
 
 Some methods are included in their respective Week folder, but other more general are lcoated in `common/methods`.
 You can find more information in each method:
+
 - `AreaFiltering.py`
 - `BlockMathingOF.py`
 - `Farneback.py`
 - `GaussianMethods.py`
 - `LucasKanade.py`
 - `ShadowRemoval.py`
+
+## Configuration
+
+The configuration file is located in `common/config.py`. This file will be upgraded for the new features. You can specify which dataset you want to use, select the names of the root folder and their respective subfolders (Ground Truth and Input images) and other parameters.
+More info in `common/config.py`.
 
 ## Database
 
