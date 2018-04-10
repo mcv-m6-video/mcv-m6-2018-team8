@@ -56,11 +56,10 @@ def HexToBGR(hex):
 
     return tuple(int(hex[i:i + 2], 16) for i in (4, 2, 0))
 
-def SpeedDetector(d):
-    kilometer_per_pixel = 80
-    return np.round(np.abs(np.log(d)+kilometer_per_pixel), 1)
+def SpeedDetector(d, speed_estimator):
+    return np.round(np.abs(np.log(d)+speed_estimator), 1)
 
-def Tracking_CamShift(input, gt, debug=False):
+def Tracking_CamShift(input, gt, threshold_min_area=500, speed_estimator=0, debug=False):
 
     assert (len(input) == len(gt))
 
@@ -106,7 +105,7 @@ def Tracking_CamShift(input, gt, debug=False):
             speed = -1
             # id = new_id + region_id
             id = region_id + offset_id - error_id
-            if region.area >= 200:
+            if region.area >= threshold_min_area:
                 # bbox (min_row, min_col, max_row, max_col)
                 minr, minc, maxr, maxc = region.bbox
 
@@ -131,7 +130,7 @@ def Tracking_CamShift(input, gt, debug=False):
                     distance = np.sqrt(np.power(valid_regions[id].centroid[0] - region.centroid[0], 2)
                                        + np.power(valid_regions[id].centroid[1] - region.centroid[1], 4))
 
-                    speed = SpeedDetector(distance)
+                    speed = SpeedDetector(distance, speed_estimator)
 
                     if distance < 500:
                         car_still_alive = True

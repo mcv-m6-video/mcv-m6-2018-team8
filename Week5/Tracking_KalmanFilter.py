@@ -30,9 +30,8 @@ def checkImages(im):
 
     return im
 
-def SpeedDetector(d):
-    kilometer_per_pixel = 80
-    return np.round(np.abs(np.log(d)+kilometer_per_pixel), 1)
+def SpeedDetector(d, speed_estimator):
+    return np.round(np.abs(np.log(d)+speed_estimator), 1)
 
 def HexToBGR(hex):
     if "#" in hex:
@@ -41,7 +40,7 @@ def HexToBGR(hex):
     return tuple(int(hex[i:i + 2], 16) for i in (4, 2, 0))
 
 
-def Tracking_KalmanFilter(input, gt, debug=False):
+def Tracking_KalmanFilter(input, gt, threshold_min_area=500, speed_estimator=0, debug=False):
 
     assert (len(input) == len(gt))
 
@@ -80,7 +79,7 @@ def Tracking_KalmanFilter(input, gt, debug=False):
             speed = -1 # by default
             id = region_id + offset_id - error_id
 
-            if region.area >= 200:
+            if region.area >= threshold_min_area:
                 # bbox (min_row, min_col, max_row, max_col)
                 minr, minc, maxr, maxc = region.bbox
 
@@ -101,7 +100,7 @@ def Tracking_KalmanFilter(input, gt, debug=False):
                     distance = np.sqrt(np.power(valid_regions[id].centroid[0] - region.centroid[0], 2)
                                        + np.power(valid_regions[id].centroid[1] - region.centroid[1], 4))
 
-                    speed = SpeedDetector(distance)
+                    speed = SpeedDetector(distance, speed_estimator)
 
                     if distance < 500:
                         car_still_alive = True
@@ -151,7 +150,8 @@ def Tracking_KalmanFilter(input, gt, debug=False):
                             fontScale=0.5, color=HexToBGR(palette[id]))
 
                 # draw current rectangle for each id (from regions props)
-                cv2.rectangle(image_color, (minc, minr), (maxc, maxr), HexToBGR(palette[id]), thickness=2)
+                thickness = 4 if (speed > speed_estimator) else 2
+                cv2.rectangle(image_color, (minc, minr), (maxc, maxr), HexToBGR(palette[id]), thickness=thickness)
 
                 # draw last point of the tracked line (from points predicted) [-1]
                 cv2.circle(image_color,

@@ -1,13 +1,19 @@
 import numpy as np
 from scipy import ndimage
 
-def Holefilling(input, connectivity):
+def Holefilling(input, connectivity, kernel=np.array([[1, 1, 1], [1, 1, 1], [1, 1, 1]])):
 
-    print ("Connectivity: {}".format(connectivity))
+    print("Connectivity: {}".format(connectivity))
+
+    if isinstance(input, (list,)):
+        input = np.array(input)
+
+    if input.dtype != np.uint8:
+        input = np.uint8(input)
 
     gt_hole = []
     for i, img in enumerate(input):
-        inside_mask = ndimage.binary_fill_holes(img*255, structure=np.array([[1, 1, 1], [1, 1, 1], [1, 1, 1]]).astype(np.bool))
+        inside_mask = ndimage.binary_fill_holes(img*255, structure=kernel.astype(np.bool))
         # inside_mask = ndimage.binary_erosion(boolimage, structure=np.array([[1, 1, 1], [1, 1, 1], [1, 1, 1]]).astype(np.bool))
 
         if connectivity == 4:
@@ -15,10 +21,10 @@ def Holefilling(input, connectivity):
         else:
             el = np.array([[1, 1, 1], [1, 1, 1], [1, 1, 1]]).astype(np.bool)
 
-        outputImage = np.maximum(inside_mask, ndimage.grey_erosion(inside_mask, size=(3, 3), footprint=el))
+        outputImage = np.maximum(inside_mask, ndimage.grey_erosion(inside_mask, size=(7, 7), footprint=el))
 
         out = np.where(outputImage == True, 255, 0)
 
         gt_hole.append(out)
 
-    return gt_hole
+    return np.array(gt_hole)

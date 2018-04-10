@@ -1,17 +1,12 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Tue Apr 10 11:49:37 2018
-
-@author: Adrian
-"""
+import sys
 sys.path.append('../')
 from common.config import *
 from common.Database import *
 from common.extractPerformance import *
 from methods.GaussianMethods import *
+from methods.AreaFiltering import *
 from Week3.MorphologicTransformation import *
 from Week3.Holefilling import *
-
 
 from Tracking_KalmanFilter import *
 from Tracking_CamShift import *
@@ -33,31 +28,65 @@ def checkFilesNPY(dir="."):
     return np.load(mean), np.load(std), np.load(gt_test)
 
 if __name__ == "__main__":
-#    gt_db = Database(abs_dir_gt, start_frame=start_frame, end_frame=end_frame)
-#    input_db = Database(abs_dir_input, start_frame=start_frame, end_frame=end_frame)
-#
-#    gt = gt_db.loadDB(im_color=cv2.IMREAD_UNCHANGED | cv2.IMREAD_ANYDEPTH)
-    video = "VID_20180409_134421.mp4"
-    cap = cv2.VideoCapture(video)
-    post_frame = cap.get(cv2.CAP_PROP_FRAME_COUNT)
-    
-    imagescomp = []
-#Crop region
+
+    # Crop region
     x1 = 400
     y1 = 600
     x2 = 1200
     y2 = 1900
-#Number of frames
-    Nfr = 300
-    for i in range(0, Nfr):
-        fr = cap.read()
-        frtocrop = fr[1]
-        crop_img = frtocrop[y1:y2, x1:x2]
-        imagescomp.append(crop_img)
-    final_images = np.array(imagescomp)
-    
-    input = final_images
-#    input = input_db.loadDB(im_color=True)
+
+    # Number of frames
+    Nfr = 1000
+
+    video = "VID_20180409_134421.mp4"
+    cap = cv2.VideoCapture(video)
+
+    # Check if camera opened successfully
+    if (cap.isOpened() == False):
+        print("Error opening video stream or file")
+
+    post_frame = cap.get(cv2.CAP_PROP_FRAME_COUNT)
+
+    print("Frame: {}".format(post_frame))
+
+    images_demo_color = []
+    images_demo = []
+    images_for_mean = []
+    id = 0
+    while (id<Nfr):
+
+        status, frame = cap.read()
+
+        if status:
+            crop_img = frame[y1:y2, x1:x2]
+            crop_img_gray = cv2.cvtColor(crop_img, cv2.COLOR_BGR2GRAY)
+
+            if id > 600 and id < 700:
+                images_for_mean.append(crop_img_gray)
+
+            images_demo.append(crop_img_gray)
+            images_demo_color.append(crop_img)
+
+            # im_test = crop_img.copy()
+            # cv2.putText(im_test, "{}".format(id), (50, 50), cv2.FONT_HERSHEY_DUPLEX,
+            #             fontScale=2, color=(0, 0, 255))
+            # cv2.imshow("UAB", im_test)
+            # cv2.waitKey(1)
+
+        else:
+            break
+
+        sys.stdout.write("\r  {}/{}".format(id, Nfr))
+        sys.stdout.flush()
+
+        id+=1
+
+    cap.release()
+    cv2.destroyAllWindows()
+
+    images_demo = np.array(images_demo)
+    images_demo_color = np.array(images_demo_color)
+    images_for_mean = np.array(images_for_mean)
 
     dir_to_save_fig = "output_images"
     dir_to_save_npy = "output_npy"
@@ -67,51 +96,54 @@ if __name__ == "__main__":
     if not os.path.exists(dir_to_save_npy):
         os.mkdir(dir_to_save_npy)
 
-    """
-    AdaptativeGaussian Computation (no compensation)
-    Extract the Foreground Image
-    """
+    # array_alpha = np.array([3.8])
+    array_alpha = np.arange(0, 16, step=2)
 
-    # Highway
-    array_alpha = np.array([3.8])
-    array_rho = np.array([0.22])
+    data = images_demo[240:600]
+    if not os.path.exists(os.path.join(dir_to_save_npy, "gt_ownvideo_{}.npy".format(DATABASE))):
 
-    # Fall
-    # array_alpha = np.array([5.0])
-    # array_rho = np.array([0.22])
+        matrix_mean, matrix_std, gt_test = OneSingleGaussian(data, array_alpha, num_of_train_images=0,
+                                                             data_for_train=images_for_mean, im_show=False)
 
-    # Traffic
-    # array_alpha = np.array([5.0])
-    # array_rho = np.array([0.11])
-
-    if not os.path.exists(os.path.join(dir_to_save_npy, "gt_test_{}_{}.npy".format(GAUSSIAN_METHOD,DATABASE))):
-
-        if GAUSSIAN_METHOD in 'adaptative':
-            matrix_mean, matrix_std, gt_test = OneSingleGaussianAdapt(input, alpha_params=array_alpha,
-                                                                      rho_params=array_rho,
-                                                                      num_of_train_images=len(input) // 2,
-                                                                      im_show=False)
-        else:
-            matrix_mean, matrix_std, gt_test = OneSingleGaussian(input, array_alpha, im_show=False)
-
-        np.save(os.path.join(dir_to_save_npy, "gt_test_{}_{}".format(GAUSSIAN_METHOD,DATABASE)), gt_test)
+        np.save(os.path.join(dir_to_save_npy, "gt_ownvideo_{}".format(DATABASE)), gt_test)
 
     else:
-        gt_test = np.load(os.path.join(dir_to_save_npy, "gt_test_{}_{}.npy".format(GAUSSIAN_METHOD,DATABASE)))
+        gt_test = np.load(os.path.join(dir_to_save_npy, "gt_ownvideo_{}.npy".format(DATABASE)))
 
+    # for i, alpha in enumerate(array_alpha):
+    #     for img in gt_test[i]:
+    #         cv2.imshow("Alpha {}".format(alpha), cv2.convertScaleAbs(np.uint8(img), alpha=255.0))
+    #         cv2.waitKey(10)
+    #
+    # cv2.destroyAllWindows()
+
+    gt_test = gt_test[7]
     if use_morph_ex:
         kernel = cv2.getStructuringElement(MORPH_STRUCTURE, (3, 3))
-        gt_test = MorphologicalTransformation(gt_test[0, 0], kernel=kernel, type=MORPH_EX)
+        gt_test = MorphologicalTransformation(gt_test, kernel=kernel, type=MORPH_EX)
 
-    gt_test = Holefilling(gt_test, 4)
+        kernel = cv2.getStructuringElement(MORPH_STRUCTURE, (3, 3))
+        gt_test = MorphologicalTransformation(gt_test, kernel=kernel, type="erosion")
+
+    gt_test = AreaFiltering(gt_test, 1000)
+    gt_test = Holefilling(gt_test, connectivity=4, kernel=cv2.getStructuringElement(MORPH_STRUCTURE, (7, 7)))
 
 
-    # data = gt
-    data = gt_test
 
-    track_gt = Tracking_KalmanFilter(input[-len(data):], data, debug=True)
-    track_gt = Tracking_CamShift(input[-len(data):], data, debug=True)
-    # MakeYourGIF(track_gt, "camshift_tacking_gt_{}.gif".format(DATABASE))
+    # for img in gt_test:
+    #     cv2.imshow("Alpha {}".format(array_alpha[7]), cv2.convertScaleAbs(np.uint8(img), alpha=255.0))
+    #     cv2.waitKey(10)
+    #
+    # cv2.destroyAllWindows()
+    #
+    # MakeYourGIF(cv2.convertScaleAbs(np.uint8(gt_test), alpha=255.0), "own_gif_mask.gif")
+
+    track_gt = Tracking_KalmanFilter(images_demo_color[240:600], gt_test, threshold_min_area=1500, speed_estimator=30, debug=True)
+
+    MakeYourGIF(track_gt, "KF_ownvideo_tacking.gif")
+
+    # track_gt = Tracking_CamShift(images_demo_color[240:600], gt_test, threshold_min_area=1500, speed_estimator=30, debug=True)
+    # MakeYourGIF(track_gt, "CS_ownvideo_tacking.gif")
 
 
 

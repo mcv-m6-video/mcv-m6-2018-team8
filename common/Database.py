@@ -14,6 +14,12 @@ class Database:
 
     def loadDB(self, im_color=cv2.IMREAD_COLOR, im_show=False, normImage=False, color_space="BGR"):
 
+        def normScaleImage(im):
+            max = 0.001 if np.max(im) == 0 else np.max(im)
+            im = cv2.convertScaleAbs(im, alpha=np.iinfo(im.dtype).max / max)
+
+            return im
+
         file_images = glob.glob(os.path.join(self.db_dir, "*.png")) + glob.glob(os.path.join(self.db_dir, "*.jpg"))
 
         if self.end_frame == -1:
@@ -35,7 +41,7 @@ class Database:
                 raise ValueError("{} does not exist! use BGR or HSV".format(color_space))
 
             if normImage:
-                im = self.normImage(im)
+                im = normScaleImage(im)
 
             if im_show:
                 cv2.imshow("frame", im)
@@ -50,9 +56,3 @@ class Database:
         cv2.destroyAllWindows()
 
         return np.array(db)
-
-    def normImage(sef, im):
-        max = 0.001 if np.max(im) == 0 else np.max(im)
-        im = cv2.convertScaleAbs(im, alpha=np.iinfo(im.dtype).max / max)
-
-        return im
