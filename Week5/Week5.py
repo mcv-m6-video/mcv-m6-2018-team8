@@ -1,11 +1,12 @@
+import sys
+sys.path.append('../')
 from common.config import *
 from common.Database import *
 from common.extractPerformance import *
 from methods.GaussianMethods import *
+from methods.AreaFiltering import *
 from Week3.MorphologicTransformation import *
 from Week3.Holefilling import *
-sys.path.append('../')
-
 from Tracking_KalmanFilter import *
 from Tracking_CamShift import *
 
@@ -38,11 +39,6 @@ if __name__ == "__main__":
     if not os.path.exists(dir_to_save_npy):
         os.mkdir(dir_to_save_npy)
 
-    """
-    AdaptativeGaussian Computation (no compensation)
-    Extract the Foreground Image
-    """
-
     # Highway
     array_alpha = np.array([3.8])
     array_rho = np.array([0.22])
@@ -70,18 +66,29 @@ if __name__ == "__main__":
     else:
         gt_test = np.load(os.path.join(dir_to_save_npy, "gt_test_{}_{}.npy".format(GAUSSIAN_METHOD,DATABASE)))
 
+    gt_test = gt_test[0,0] # we only use one alpha/rho parameter
+
     if use_morph_ex:
         kernel = cv2.getStructuringElement(MORPH_STRUCTURE, (3, 3))
-        gt_test = MorphologicalTransformation(gt_test[0, 0], kernel=kernel, type=MORPH_EX)
+        gt_test = MorphologicalTransformation(gt_test, kernel=kernel, type=MORPH_EX)
 
-    gt_test = Holefilling(gt_test, 4)
+        kernel = cv2.getStructuringElement(MORPH_STRUCTURE, (3, 3))
+        gt_test = MorphologicalTransformation(gt_test, kernel=kernel, type="erosion")
 
+        gt_test = AreaFiltering(gt_test, 1000)
+        gt_test = Holefilling(gt_test, connectivity=4, kernel=cv2.getStructuringElement(MORPH_STRUCTURE, (7, 7)))
 
-    # data = gt
-    data = gt_test
+    data = gt
+    # data = gt_test
 
-    track_gt = Tracking_KalmanFilter(input[-len(data):], data, debug=True)
-    track_gt = Tracking_CamShift(input[-len(data):], data, debug=True)
-    # MakeYourGIF(track_gt, "camshift_tacking_gt_{}.gif".format(DATABASE))
+    if TRACKING_METHOD == "kalman":
+        track_gt, speeds = Tracking_KalmanFilter(input[-len(data):], data, speed_estimator=30,
+                                                 threshold_min_area=400, debug=False)
+    elif TRACKING_METHOD == "camshift":
+        track_gt, speeds = Tracking_CamShift(input[-len(data):], data, speed_estimator=30,
+                                             debug=False)
+
+    print(speeds)
+    # MakeYourGIF(track_gt, "test2_{}.gif".format(DATABASE))
 
 

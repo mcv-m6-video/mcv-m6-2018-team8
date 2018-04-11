@@ -30,8 +30,11 @@ def checkImages(im):
 
     return im
 
-def SpeedDetector(d, speed_estimator):
-    return np.round(np.abs(np.log(d)+speed_estimator), 1)
+def SpeedDetector(d, speed_estimator, last_value=0):
+    if last_value:
+        return np.round( (np.abs(np.log(d)) * speed_estimator + last_value) / 2, 1)
+
+    return np.round(np.abs(np.log(d))*speed_estimator, 1)
 
 def HexToBGR(hex):
     if "#" in hex:
@@ -53,6 +56,7 @@ def Tracking_KalmanFilter(input, gt, threshold_min_area=500, speed_estimator=0, 
     kalmanFilters = {}
     valid_regions = {}
     pts_predicted = {}
+    speed_predicted = {}
     for num_frame, (frame, mask) in enumerate(zip(input, gt)):
 
         sys.stdout.write("\r  {}/{}".format(num_frame, len(gt)))
@@ -86,21 +90,26 @@ def Tracking_KalmanFilter(input, gt, threshold_min_area=500, speed_estimator=0, 
                 if id in valid_regions:
 
                     if debug:
-                        im_test = image_color.copy()
+                        im_test = frame.copy()
                         old_measurement = (
                         np.int32(valid_regions[id].centroid[1]), np.int32(valid_regions[id].centroid[0]))
                         cv2.circle(im_test, old_measurement, 3, (0, 255, 0), -1)
                         cv2.circle(im_test, (np.int32(region.centroid[1]), np.int32(region.centroid[0])), 2,
-                                   (0, 0, 255), -1)
+                                   (255, 0, 0), -1)
                         cv2.imshow("Current Point", im_test)
                         cv2.waitKey(50)
 
                     # for i in range(max(1, id-1), id+2):
                     #     if i in valid_regions:
-                    distance = np.sqrt(np.power(valid_regions[id].centroid[0] - region.centroid[0], 2)
-                                       + np.power(valid_regions[id].centroid[1] - region.centroid[1], 4))
+                    distance = np.sqrt(np.power(valid_regions[id].centroid[0] - region.centroid[0], 4)
+                                       + np.power(valid_regions[id].centroid[1] - region.centroid[1], 2))
 
-                    speed = SpeedDetector(distance, speed_estimator)
+                    if id in speed_predicted:
+                        speed_predicted[id] = SpeedDetector(distance, speed_estimator, last_value=speed_predicted[id])
+                    else:
+                        speed_predicted[id] = SpeedDetector(distance, speed_estimator)
+
+                    speed = speed_predicted[id]
 
                     if distance < 500:
                         car_still_alive = True
@@ -170,10 +179,10 @@ def Tracking_KalmanFilter(input, gt, threshold_min_area=500, speed_estimator=0, 
 
         cv2.imshow("Kalman Filter", image_color)
         cv2.imshow("Mask", mask)
-        cv2.waitKey(1)
+        cv2.waitKey(40)
 
         output_images.append(image_color)
 
     cv2.destroyAllWindows()
 
-    return np.array(output_images)
+    return np.array(output_images), speed_predicted

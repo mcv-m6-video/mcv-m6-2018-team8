@@ -56,8 +56,11 @@ def HexToBGR(hex):
 
     return tuple(int(hex[i:i + 2], 16) for i in (4, 2, 0))
 
-def SpeedDetector(d, speed_estimator):
-    return np.round(np.abs(np.log(d)+speed_estimator), 1)
+def SpeedDetector(d, speed_estimator, last_value=0):
+    if last_value:
+        return np.round( (np.abs(np.log(d)) * speed_estimator + last_value) / 2, 1)
+
+    return np.round(np.abs(np.log(d))*speed_estimator, 1)
 
 def Tracking_CamShift(input, gt, threshold_min_area=500, speed_estimator=0, debug=False):
 
@@ -72,7 +75,7 @@ def Tracking_CamShift(input, gt, threshold_min_area=500, speed_estimator=0, debu
     CamShiftMethods = {}
     valid_regions = {}
     pts_predicted = {}
-
+    speed_predicted = {}
     for num_frame, (frame, mask) in enumerate(zip(input, gt)):
 
         sys.stdout.write("\r  {}/{}".format(num_frame, len(gt)))
@@ -82,6 +85,7 @@ def Tracking_CamShift(input, gt, threshold_min_area=500, speed_estimator=0, debu
         hsv_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
         if debug:
+            # cv2.imwrite("output_images/hsv_frame_{}.png".format(num_frame), hsv_frame)
             cv2.imshow("HSV", hsv_frame)
             cv2.waitKey(1)
 
@@ -127,10 +131,15 @@ def Tracking_CamShift(input, gt, threshold_min_area=500, speed_estimator=0, debu
 
                     # for i in range(max(1, id-1), id+2):
                     #     if i in valid_regions:
-                    distance = np.sqrt(np.power(valid_regions[id].centroid[0] - region.centroid[0], 2)
-                                       + np.power(valid_regions[id].centroid[1] - region.centroid[1], 4))
+                    distance = np.sqrt(np.power(valid_regions[id].centroid[0] - region.centroid[0], 4)
+                                       + np.power(valid_regions[id].centroid[1] - region.centroid[1], 2))
 
-                    speed = SpeedDetector(distance, speed_estimator)
+                    if id in speed_predicted:
+                        speed_predicted[id] = SpeedDetector(distance, speed_estimator, last_value=speed_predicted[id])
+                    else:
+                        speed_predicted[id] = SpeedDetector(distance, speed_estimator)
+
+                    speed = speed_predicted[id]
 
                     if distance < 500:
                         car_still_alive = True
@@ -200,10 +209,10 @@ def Tracking_CamShift(input, gt, threshold_min_area=500, speed_estimator=0, debu
 
         cv2.imshow("CamShift", image_color)
         cv2.imshow("Mask", mask)
-        cv2.waitKey(1)
+        cv2.waitKey(40)
 
         output_images.append(image_color)
 
     cv2.destroyAllWindows()
 
-    return np.array(output_images)
+    return np.array(output_images), speed_predicted
