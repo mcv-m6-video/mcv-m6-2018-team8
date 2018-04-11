@@ -20,6 +20,9 @@ dir_gt                  = "groundtruth"
 GAUSSIAN_METHOD         = "adaptative"
 MORPH_EX                = "opening"
 
+# TRACKING_METHOD         = "kalman"
+TRACKING_METHOD         = "camshift"
+
 # choose the desire strucutre for the morphological operation (cv2 type)
 use_morph_ex            = True
 MORPH_STRUCTURE         = cv2.MORPH_RECT
