@@ -19,6 +19,14 @@ Team 8:
 - Week 4: [Video stabilization](Week4)
 - Week 5: [Region tracking](Week5)
 
+## Slides Final Project
+
+You can see the slides of the final project from this _[link](https://docs.google.com/presentation/d/1GgvD_Hnn-2GLvDzik_qr1JNEuMHfOUU9SbkHbf38tfo/edit?usp=sharing)_. 
+
+## Report
+
+You can read the report of the project from this _[link](https://www.overleaf.com/read/fypcgqxsrmtk)_ (not finished yet).
+
 ## Common Files and Metrics
 
 ### Peformance
