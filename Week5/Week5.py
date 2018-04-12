@@ -78,17 +78,14 @@ if __name__ == "__main__":
         gt_test = AreaFiltering(gt_test, 1000)
         gt_test = Holefilling(gt_test, connectivity=4, kernel=cv2.getStructuringElement(MORPH_STRUCTURE, (7, 7)))
 
-    data = gt
-    # data = gt_test
+    # data = gt
+    data = gt_test
 
     if TRACKING_METHOD == "kalman":
         track_gt, speeds = Tracking_KalmanFilter(input[-len(data):], data, speed_estimator=30,
                                                  threshold_min_area=400, debug=False)
     elif TRACKING_METHOD == "camshift":
-        track_gt, speeds = Tracking_CamShift(input[-len(data):], data, speed_estimator=30,
-                                             debug=False)
+        track_gt, speeds = Tracking_CamShift(input[-len(data):], data, speed_estimator=50, debug=False)
 
-    print(speeds)
+    # print(speeds)
     # MakeYourGIF(track_gt, "test2_{}.gif".format(DATABASE))
-
-

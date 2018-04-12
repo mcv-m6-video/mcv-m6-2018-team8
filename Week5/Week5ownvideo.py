@@ -125,10 +125,8 @@ if __name__ == "__main__":
         kernel = cv2.getStructuringElement(MORPH_STRUCTURE, (3, 3))
         gt_test = MorphologicalTransformation(gt_test, kernel=kernel, type="erosion")
 
-    gt_test = AreaFiltering(gt_test, 1000)
-    gt_test = Holefilling(gt_test, connectivity=4, kernel=cv2.getStructuringElement(MORPH_STRUCTURE, (7, 7)))
-
-
+        gt_test = AreaFiltering(gt_test, 1000)
+        gt_test = Holefilling(gt_test, connectivity=4, kernel=cv2.getStructuringElement(MORPH_STRUCTURE, (7, 7)))
 
     # for img in gt_test:
     #     cv2.imshow("Alpha {}".format(array_alpha[7]), cv2.convertScaleAbs(np.uint8(img), alpha=255.0))
@@ -138,12 +136,25 @@ if __name__ == "__main__":
     #
     # MakeYourGIF(cv2.convertScaleAbs(np.uint8(gt_test), alpha=255.0), "own_gif_mask.gif")
 
-    track_gt = Tracking_KalmanFilter(images_demo_color[240:600], gt_test, threshold_min_area=1500, speed_estimator=30, debug=True)
+    if TRACKING_METHOD == "kalman":
+        track_gt, speeds = Tracking_KalmanFilter(images_demo_color[240:600], gt_test, speed_estimator=8.5,
+                                                 limit_speed=35, threshold_min_area=2500, debug=True)
 
-    MakeYourGIF(track_gt, "KF_ownvideo_tacking.gif")
+    elif TRACKING_METHOD == "camshift":
+        track_gt, speeds = Tracking_CamShift(images_demo_color[240:600], gt_test, speed_estimator=8.5,
+                                             limit_speed=35, threshold_min_area=2500, debug=True)
 
-    # track_gt = Tracking_CamShift(images_demo_color[240:600], gt_test, threshold_min_area=1500, speed_estimator=30, debug=True)
-    # MakeYourGIF(track_gt, "CS_ownvideo_tacking.gif")
+    # Resize the viedo to have a lighter GIF (less Mb)
+    # gt_test_resize = []
+    # import scipy
+    # for img in track_gt:
+    #     rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+    #     gt_test_resize.append(scipy.misc.imresize(rgb, 0.5))
+    #
+    # MakeYourGIF(gt_test_resize, "{}_ownvideo_tacking.gif".format(TRACKING_METHOD))
+
+
+
 
 
 
