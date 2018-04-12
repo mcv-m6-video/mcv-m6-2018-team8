@@ -62,7 +62,7 @@ def SpeedDetector(d, speed_estimator, last_value=0):
 
     return np.round(np.abs(np.log(d))*speed_estimator, 1)
 
-def Tracking_CamShift(input, gt, threshold_min_area=500, speed_estimator=0, debug=False):
+def Tracking_CamShift(input, gt, threshold_min_area=500, speed_estimator=0, limit_speed=None, debug=False):
 
     assert (len(input) == len(gt))
 
@@ -189,6 +189,16 @@ def Tracking_CamShift(input, gt, threshold_min_area=500, speed_estimator=0, debu
 
                 # draw current rectangle for each id
                 cv2.rectangle(image_color, (minc, minr), (maxc, maxr), HexToBGR(palette[id]), thickness=2)
+
+                if not limit_speed is None:
+                    if speed > limit_speed:
+                        alpha = 0.4
+                        overlay = image_color.copy()
+                        cv2.rectangle(overlay, (minc, minr), (maxc, maxr), HexToBGR("#ff3535"), -1)
+                        cv2.addWeighted(overlay, alpha, image_color, 1 - alpha, 0, image_color)
+                    else:
+                        # the car is not trespassing the speed limit
+                        pass
 
                 # draw last point of the tracked line [-1]
                 (center_c, center_r) = (pts_predicted[id][-4:][0][0]+(pts_predicted[id][-4:][1][0]-pts_predicted[id][-4:][0][0])//2,

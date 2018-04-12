@@ -43,7 +43,7 @@ def HexToBGR(hex):
     return tuple(int(hex[i:i + 2], 16) for i in (4, 2, 0))
 
 
-def Tracking_KalmanFilter(input, gt, threshold_min_area=500, speed_estimator=0, debug=False):
+def Tracking_KalmanFilter(input, gt, threshold_min_area=500, speed_estimator=0, limit_speed=None, debug=False):
 
     assert (len(input) == len(gt))
 
@@ -159,8 +159,17 @@ def Tracking_KalmanFilter(input, gt, threshold_min_area=500, speed_estimator=0, 
                             fontScale=0.5, color=HexToBGR(palette[id]))
 
                 # draw current rectangle for each id (from regions props)
-                thickness = 4 if (speed > speed_estimator) else 2
-                cv2.rectangle(image_color, (minc, minr), (maxc, maxr), HexToBGR(palette[id]), thickness=thickness)
+                cv2.rectangle(image_color, (minc, minr), (maxc, maxr), HexToBGR(palette[id]), thickness=2)
+
+                if not limit_speed is None:
+                    if speed > limit_speed:
+                        alpha = 0.4
+                        overlay = image_color.copy()
+                        cv2.rectangle(overlay, (minc, minr), (maxc, maxr), HexToBGR("#ff3535"), -1)
+                        cv2.addWeighted(overlay, alpha, image_color, 1 - alpha, 0, image_color)
+                    else:
+                        # the car is not trespassing the speed limit
+                        pass
 
                 # draw last point of the tracked line (from points predicted) [-1]
                 cv2.circle(image_color,
