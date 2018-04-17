@@ -25,7 +25,7 @@ You can see the slides of the final project from this _[link](https://docs.googl
 
 ## Report
 
-You can read the report of the project from this _[link](https://www.overleaf.com/read/fypcgqxsrmtk)_ or viewthe attached _[pdf]_
+You can read the report of the project from this _[link](https://www.overleaf.com/read/fypcgqxsrmtk)_ or view the attached _[pdf]_
 
 ## Common Files and Metrics
 
